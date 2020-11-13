@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>ProPublicaCongressAPI.Contracts</PackageId>
+    <PackageVersion>1.0.0.20</PackageVersion>
+    <Authors>Justin Skiles</Authors>
+    <Description>Easy to use wrapper around the Pro Publica Congress API</Description>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageTags>congress api propublica government data</PackageTags>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+</Project>

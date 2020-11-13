@@ -1,0 +1,18 @@
+﻿@page "/"
+
+<h1>Congress</h1>
+<p>House and Senate and Bills and Committees</p>
+<p>
+    Information from <a href="https://www.propublica.org/datastore/api/propublica-congress-api">Propublica Congress API</a>.
+    Proof of concept so far. Lot more work to do.
+    <button type="button" class="btn btn-info" @onclick="ShowToastrInfo">Show Toastr Info</button>
+</p>
+@code{
+    [Inject]
+    public HfTimeline.Services.ToastrService ToastrService { get; set; }
+
+    private async Task ShowToastrInfo()
+    {
+        await ToastrService.ShowInfoMessage();
+    }
+}

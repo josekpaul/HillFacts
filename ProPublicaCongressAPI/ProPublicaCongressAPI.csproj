@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Easy to use wrapper around the Pro Publica Congress API</Description>
+    <VersionPrefix>1.1.1</VersionPrefix>
+    <Authors>Justin Skiles</Authors>
+    <AssemblyName>ProPublicaCongressAPI</AssemblyName>
+    <PackageId>ProPublicaCongressAPI</PackageId>
+    <PackageProjectUrl>https://github.com/babelshift/ProPublicaCongressAPI</PackageProjectUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- https://github.com/nuget/home/issues/3891 -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="InternalModels\" />
+    <Folder Include="Resolvers\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ProPublicaCongressAPI.Contracts\ProPublicaCongressAPI.Contracts.csproj" PrivateAssets="all" />
+  </ItemGroup>
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- https://github.com/nuget/home/issues/3891 -->
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
+</Project>

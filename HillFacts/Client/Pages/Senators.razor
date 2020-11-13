@@ -1,0 +1,105 @@
+@page "/senators"
+@using ProPublicaCongressAPI.Contracts
+@inject HttpClient Http
+
+<h1>Senators</h1>
+
+<p>The current Senate</p>
+
+@if (senators == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <input @bind="BoundFilter" @bind:event="oninput" class="form-control" />
+    @foreach (var senator in senators)
+    {
+        <BSCollapseItem>
+            <div class="row">
+                <div class="col-5">
+                    <BSCollapseToggle>
+                        @(context ? "-":"+")
+                    </BSCollapseToggle>
+                    @if (!string.IsNullOrEmpty(senator.TwitterAccount))
+                    {
+                        <a target="_blank" href="http://twitter.com/@(senator.TwitterAccount)">
+                            <img src="images/twitter24x24.png" />
+                        </a>
+                    }
+                    <span class="badge badge-info party-@(senator.Party.ToLower())-background">@senator.Party</span>
+                    <a href="MemberDetail/@senator.Id">@($"{senator.FirstName} {senator.LastName}")</a>
+                    @($" {senator.LeadershipRole}")
+                </div>
+                <div class="col">
+                    @senator.State
+                </div>
+                <div class="col">
+                    @(senator.PercentageOVotesWithParty)% part-line, @(senator.PercentageOfVotesMissed)% missed votes
+                </div>
+            </div>
+            <BSCollapse>
+                <div class="row">
+                    <div class="col-8">
+                        @senator.Seniority senator of @(senator.State). Voted a total of @senator.TotalVotes, missed @(senator.MissedVotes). Next election at @senator.NextElection
+                    </div>
+                    <div class="col">
+                        Office at @senator.Office<br />
+                        #TEL @senator.Phone<br />
+                    </div>
+                </div>
+                @*<BSCard CardType="CardType.Card">
+                        <BSCard CardType="CardType.Body">
+                            <BSCard CardType="CardType.Text">
+                                @senator.Office
+                            </BSCard>
+                        </BSCard>
+                    </BSCard>*@
+            </BSCollapse>
+        </BSCollapseItem>
+    }
+
+    @*<table class="table">
+            <thead>
+                <tr>
+                    <th>State</th>
+                    <th>Name</th>
+                    <th>Party-Line Voting %</th>
+                    <th>Summary</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var senator in senators)
+                {
+                    <tr>
+                        <td>@senator.State</td>
+                        <td>@($"{senator.FirstName} {senator.LastName} ({senator.Party}) {senator.LeadershipRole}")</td>
+                        <td>@senator.PercentageOVotesWithParty</td>
+                        <td>@senator.Office</td>
+                    </tr>
+                }
+            </tbody>
+        </table>*@
+}
+
+
+@code {
+    IEnumerable<MemberSummary> senators;
+    string CurrentFilter = "";
+    string BoundFilter
+    {
+        get { return CurrentFilter; }
+        set
+        {
+            CurrentFilter = value;
+            senators = senators.Where(s => (s.State + " " + s.FirstName + " " + s.LastName).Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        senators = await Http.GetFromJsonAsync<List<MemberSummary>>("/api/Propublica/GetSenators");
+    }
+
+}

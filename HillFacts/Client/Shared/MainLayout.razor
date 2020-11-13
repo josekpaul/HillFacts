@@ -1,0 +1,16 @@
+﻿@inherits LayoutComponentBase
+@inject IBootstrapCss BootStrapCss
+<NavMenu></NavMenu>
+<div class="container-fluid">
+    @Body
+</div>
+@code{
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await BootStrapCss.SetBootstrapCss("4.3.1");
+        }
+        base.OnAfterRender(firstRender);
+    }
+}

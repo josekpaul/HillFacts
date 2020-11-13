@@ -1,0 +1,58 @@
+﻿@page "/memberdetail/{Id}"
+@using ProPublicaCongressAPI.Contracts
+@inject HttpClient Http
+
+<h3>Member Detail</h3>
+@if (Member != null)
+{
+    <h2>@Member.FirstName @Member.LastName</h2>
+    <p>Born on @(Member.DateOfBirth). @Member.TimesTopicsUrl </p>
+    {
+        var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
+        if (currentRole != null)
+        {
+            <p>
+                Sponsored @currentRole.BillSponsoredCount bills.
+                Co-sponsored @currentRole.BillCosponsoredCount bills.
+            </p>
+            foreach (var committee in currentRole.Committees)
+            {
+                <span>@committee.Name : @committee.RankInParty</span>
+                <br />
+            }
+        }
+    }
+}
+else
+{
+    <b>blah</b>
+}
+<h4>Sponsored Bills</h4>
+@if (RecentSponsoredBills != null)
+{
+    var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
+
+    foreach (var subjectGroup in sponsoredBillGroups)
+    {
+        <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+    }
+
+    foreach (var subjectGroup in sponsoredBillGroups)
+    {
+        foreach(var g in subjectGroup)
+        {
+            <p>@g.BillTitle introduced on @(g.DateIntroduced). Currently @g.LatestMajorAction (@g.DateLatestMajorAction).  </p>
+        }
+    }
+}
+@code {
+    [Parameter] public string Id { get; set; }
+    Member Member { get; set; }
+    RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
+        RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetBillsByMember?id={Id}");
+    }
+
+}

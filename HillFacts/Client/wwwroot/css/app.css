@@ -1,0 +1,40 @@
+﻿body {
+    padding-top: 65px;
+}
+
+#blazor-error-ui {
+    background: lightyellow;
+    bottom: 0;
+    box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+    display: none;
+    left: 0;
+    padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+    position: fixed;
+    width: 100%;
+    z-index: 1000;
+}
+
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+.party-d-color {
+    color: #223e92;
+}
+
+.party-r-color {
+    color: #de0100;
+}
+
+.party-d-background {
+    background-color: #223e92;
+    color: rgba(255,255,255, 0.8);
+}
+
+.party-r-background {
+    background-color: #de0100;
+    color: rgba(255,255,255, 0.8);
+}

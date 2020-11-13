@@ -1,0 +1,60 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Server", "HillFacts\Server\HillFacts.Server.csproj", "{3B87282A-E086-4D6F-B750-8BD3BFB5C191}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Shared", "HillFacts\Shared\HillFacts.Shared.csproj", "{031D7E66-8ADF-4BA8-85D9-86A5C5844A2B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProPublicaCongressAPI", "ProPublicaCongressAPI\ProPublicaCongressAPI.csproj", "{1AE458E6-38A7-4AFD-819F-B78EDD5DFA1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProPublicaCongressAPI.Contracts", "ProPublicaCongressAPI.Contracts\ProPublicaCongressAPI.Contracts.csproj", "{B451DB78-D639-4BAC-8F89-8AAE8C7F2130}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", "{11AE5151-B9A6-43A6-9522-F3FE70F61F22}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Client", "HillFacts\Client\HillFacts.Client.csproj", "{186859D6-8F90-48FC-A530-3663642D82D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HfTimeline", "HfTimeline\HfTimeline.csproj", "{EF992FC3-A8AE-4906-A622-1D863030E423}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B87282A-E086-4D6F-B750-8BD3BFB5C191}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B87282A-E086-4D6F-B750-8BD3BFB5C191}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B87282A-E086-4D6F-B750-8BD3BFB5C191}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B87282A-E086-4D6F-B750-8BD3BFB5C191}.Release|Any CPU.Build.0 = Release|Any CPU
+		{031D7E66-8ADF-4BA8-85D9-86A5C5844A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{031D7E66-8ADF-4BA8-85D9-86A5C5844A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{031D7E66-8ADF-4BA8-85D9-86A5C5844A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{031D7E66-8ADF-4BA8-85D9-86A5C5844A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AE458E6-38A7-4AFD-819F-B78EDD5DFA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AE458E6-38A7-4AFD-819F-B78EDD5DFA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AE458E6-38A7-4AFD-819F-B78EDD5DFA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AE458E6-38A7-4AFD-819F-B78EDD5DFA1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B451DB78-D639-4BAC-8F89-8AAE8C7F2130}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B451DB78-D639-4BAC-8F89-8AAE8C7F2130}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B451DB78-D639-4BAC-8F89-8AAE8C7F2130}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B451DB78-D639-4BAC-8F89-8AAE8C7F2130}.Release|Any CPU.Build.0 = Release|Any CPU
+		{186859D6-8F90-48FC-A530-3663642D82D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{186859D6-8F90-48FC-A530-3663642D82D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{186859D6-8F90-48FC-A530-3663642D82D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{186859D6-8F90-48FC-A530-3663642D82D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF992FC3-A8AE-4906-A622-1D863030E423}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF992FC3-A8AE-4906-A622-1D863030E423}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF992FC3-A8AE-4906-A622-1D863030E423}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF992FC3-A8AE-4906-A622-1D863030E423}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EF992FC3-A8AE-4906-A622-1D863030E423} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {56688305-3ECD-4D9B-9796-90C2AE2A6C1B}
+	EndGlobalSection
+EndGlobal
