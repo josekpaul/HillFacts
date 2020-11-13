@@ -105,7 +105,7 @@ namespace ProPublicaCongressAPI.InternalModels
         public string State { get; set; }
 
         [JsonProperty("district")]
-        public int District { get; set; }
+        public string District { get; set; }
 
         [JsonProperty("votesmart_id")]
         public int? VotesmartId { get; set; }

@@ -38,6 +38,6 @@ namespace ProPublicaCongressAPI.InternalModels
         public string MemberDetailUrl { get; set; }
 
         [JsonProperty("district")]
-        public int District { get; set; }
+        public string District { get; set; }
     }
 }

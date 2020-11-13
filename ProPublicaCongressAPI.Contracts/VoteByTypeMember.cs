@@ -12,7 +12,7 @@ namespace ProPublicaCongressAPI.Contracts
         
         public string State { get; set; }
         
-        public int District { get; set; }
+        public string District { get; set; }
         
         public int? TotalVoteCount { get; set; }
         

@@ -23,9 +23,9 @@ namespace HillFacts.Server.Controllers
             _propublica = new ProPublicaCongressApiClient (config.Value.PropublicaApiKey);
         }
 
-        public async Task<IEnumerable<MemberSummary>> GetSenators()
+        public async Task<IEnumerable<MemberSummary>> GetMembers(Chamber chamber)
         {
-            var membercollection = await _propublica.GetMembersAsync(116, Chamber.Senate);
+            var membercollection = await _propublica.GetMembersAsync(116, chamber);
             return membercollection.Members;
         }
 
@@ -35,7 +35,7 @@ namespace HillFacts.Server.Controllers
             return member;
         }
 
-        public async Task<RecentBillsByMemberContainer> GetBillsByMember(string id)
+        public async Task<RecentBillsByMemberContainer> GetRecentBillsByMember(string id)
         {
             var bills = await _propublica.GetRecentBillsByMember(id, RecentBillByMemberType.Introduced);
             return bills;

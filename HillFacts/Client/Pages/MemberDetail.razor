@@ -6,7 +6,7 @@
 @if (Member != null)
 {
     <h2>@Member.FirstName @Member.LastName</h2>
-    <p>Born on @(Member.DateOfBirth). @Member.TimesTopicsUrl </p>
+    <p>Born on @(Member.DateOfBirth.ToShortDateString()). @Member.TimesTopicsUrl </p>
     {
         var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
         if (currentRole != null)
@@ -25,9 +25,10 @@
 }
 else
 {
-    <b>blah</b>
+    <span>Loading..</span>
 }
-<h4>Sponsored Bills</h4>
+<hr />
+<h4>Recent Bills</h4>
 @if (RecentSponsoredBills != null)
 {
     var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
@@ -37,13 +38,19 @@ else
         <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
     }
 
-    foreach (var subjectGroup in sponsoredBillGroups)
-    {
-        foreach(var g in subjectGroup)
+        foreach (var g in RecentSponsoredBills.Bills)
         {
-            <p>@g.BillTitle introduced on @(g.DateIntroduced). Currently @g.LatestMajorAction (@g.DateLatestMajorAction).  </p>
+            <div class="row p-1">
+                <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
+                <div class="col-2">@g.PrimarySubject</div>
+                <div class="col-6">@g.BillTitle</div>
+                <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
+            </div>
         }
-    }
+}
+else
+{
+    <span>Loading Bill information..</span>
 }
 @code {
     [Parameter] public string Id { get; set; }
@@ -52,7 +59,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
-        RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetBillsByMember?id={Id}");
+        RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}");
     }
 
 }

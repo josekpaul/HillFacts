@@ -17,7 +17,7 @@ namespace ProPublicaCongressAPI.InternalModels
         public string State { get; set; }
 
         [JsonProperty("district")]
-        public int District { get; set; }
+        public string District { get; set; }
 
         [JsonProperty("total_votes")]
         public int? TotalVoteCount { get; set; }

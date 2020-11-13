@@ -1,0 +1,89 @@
+@page "/HouseMembers"
+@using ProPublicaCongressAPI.Contracts
+@inject HttpClient Http
+
+<h1>@Chamber Members</h1>
+
+@if (ChamberMembers == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <input @bind="BoundFilter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control" />
+    @foreach (var member in FilteredMembers)
+    {
+        <BSCollapseItem>
+            <div class="row">
+                <div class="col-5">
+                    <BSCollapseToggle>
+                        @(context ? "-":"+")
+                    </BSCollapseToggle>
+                    @if (!string.IsNullOrEmpty(member.TwitterAccount))
+                    {
+                        <a target="_blank" href="http://twitter.com/@(member.TwitterAccount)">
+                            <img src="images/twitter24x24.png" />
+                        </a>
+                    }
+                    <span class="badge badge-info party-@(member.Party.ToLower())-background">@member.Party</span>
+                    <a href="MemberDetail/@member.Id">@($"{member.FirstName} {member.LastName}")</a>
+                    @($" {member.LeadershipRole}")
+                </div>
+                <div class="col">
+                    District @member.District, @member.State
+                </div>
+                <div class="col">
+                    @(member.PercentageOVotesWithParty)% party-line, @(member.PercentageOfVotesMissed)% missed votes
+                </div>
+            </div>
+            <BSCollapse>
+                <div class="row">
+                    <div class="col-12">
+                        Member from @(member.State), ranked @(member.Seniority). Voted a total of @member.TotalVotes, missed @(member.MissedVotes). Next election at @member.NextElection<br />
+                        Office at @member.Office<br />
+                        #TEL @member.Phone<br />
+                    </div>
+                </div>
+                @*<BSCard CardType="CardType.Card">
+                        <BSCard CardType="CardType.Body">
+                            <BSCard CardType="CardType.Text">
+                                @senator.Office
+                            </BSCard>
+                        </BSCard>
+                    </BSCard>*@
+            </BSCollapse>
+        </BSCollapseItem>
+    }
+}
+
+
+@code {
+    string Chamber = "House";
+    IEnumerable<MemberSummary> ChamberMembers;
+    IEnumerable<MemberSummary> FilteredMembers;
+    string CurrentFilter = "";
+    string BoundFilter
+    {
+        get { return CurrentFilter; }
+        set
+        {
+            CurrentFilter = value;
+            if (CurrentFilter.Length == 2)
+            {
+                FilteredMembers = ChamberMembers.Where(s => s.State.Equals(CurrentFilter, StringComparison.OrdinalIgnoreCase));
+            }
+            else
+            {
+                FilteredMembers = ChamberMembers.Where(s => (s.State + " " + s.FirstName + " " + s.LastName).Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase));
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        ChamberMembers = await Http.GetFromJsonAsync<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={Chamber}");
+        FilteredMembers = ChamberMembers;
+    }
+
+}

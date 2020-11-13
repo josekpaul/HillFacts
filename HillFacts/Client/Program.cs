@@ -23,7 +23,7 @@ namespace HillFacts.Client
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddBootstrapCss();
-            builder.Services.AddGoogleAnalytics("GA-key-here");
+            builder.Services.AddGoogleAnalytics("G-TN4Z59Z2QV");
             builder.Services.AddBlazorToastr();
             await builder.Build().RunAsync();
         }
