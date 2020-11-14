@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Components", "Components", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Client", "HillFacts\Client\HillFacts.Client.csproj", "{186859D6-8F90-48FC-A530-3663642D82D5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HfTimeline", "HfTimeline\HfTimeline.csproj", "{EF992FC3-A8AE-4906-A622-1D863030E423}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfTimeline", "HfTimeline\HfTimeline.csproj", "{EF992FC3-A8AE-4906-A622-1D863030E423}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
