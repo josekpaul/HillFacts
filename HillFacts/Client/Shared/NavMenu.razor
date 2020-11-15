@@ -1,23 +1,4 @@
-﻿@*<nav class="navbar navbar-expand-lg navbar-dark bg-secondary fixed-top">
-    <NavLink class="navbar-brand" href="" Match="NavLinkMatch.All">
-        <span class="oi oi-home" aria-hidden="true"></span> Home
-    </NavLink>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <NavLink class="nav-link" href="SenateMembers">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> Senate
-                </NavLink>
-            </li>
-            <li class="nav-item">
-                <NavLink class="nav-link" href="HouseMembers">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> House
-                </NavLink>
-            </li>
-        </ul>
-    </div>
-</nav>*@
-<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark" IsFixedTop="true">
+﻿<BSNavbar IsExpand="true" IsDark="true" Color="Color.Dark" IsFixedTop="true">
     <BSNavbarBrand Href="">Hill Facts</BSNavbarBrand>
     <BSNavbarToggler @onclick="onclick">
         @*<button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -31,6 +12,9 @@
             </BSNavItem>
             <BSNavItem>
                 <BSNavLink Href="HouseMembers">House</BSNavLink>
+            </BSNavItem>
+            <BSNavItem>
+                <BSNavLink Href="RecentBills">Bills</BSNavLink>
             </BSNavItem>
         </BSNav>
     </BSCollapse>

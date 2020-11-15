@@ -1,5 +1,5 @@
 // In development, always fetch from the network and do not enable offline support.
 // This is because caching would make development more difficult (changes would not
 // be reflected on the first load after each change).
-const version = "0.8";
+const CACHE_VERSION = 0.81;
 self.addEventListener('fetch', () => { });
