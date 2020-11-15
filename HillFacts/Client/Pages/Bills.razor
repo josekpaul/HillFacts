@@ -1,90 +1,87 @@
 ﻿@page "/RecentBills"
-@page "/RecentBills/{CurrentChamberParam}"
-@page "/RecentBills/{CurrentChamberParam}/{BillTypeParam}"
+@page "/RecentBills/{CurrentChamber}"
 @using ProPublicaCongressAPI.Contracts
-@inject IAppCacheService CacheService
+@inject HttpClient Http
 
 <h1>Recent @BillType @CurrentChamber Bills</h1>
 
 @if (RecentBills == null)
 {
-    <p><em>Loading...</em></p>
+<p><em>Loading...</em></p>
 }
 else
 {
-    <div class="row">
-        <div class="col-2">
-            <select @onchange="BillTypeChanged" class="form-control">
-                @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
+<div class="row">
+    <div class="col-2">
+        <select @onchange="ChamberChanged" class="form-control">
+            @if (BoundChamber == Chamber.House)
+            {
+            <option value="House" selected>House</option>
+            <option value="Senate">Senate</option>
+            }
+            else
+            {
+            <option value="House">House</option>
+            <option value="Senate" selected>Senate</option>
+            }
+        </select>
+    </div>
+    <div class="col-2">
+        <select @onchange="BillTypeChanged" class="form-control">
+            @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
+            {
+                if (bt == BillType)
                 {
-                    if (bt == BillType)
-                    {
-                        <option value="@bt" selected>@bt.ToString()</option>
-                    }
-                    else
-                    {
-                        <option value="@bt">@bt.ToString()</option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="col-2">
-            <select @onchange="ChamberChanged" class="form-control">
-                @if (BoundChamber == Chamber.House)
-                {
-                    <option value="House" selected>House</option>
-                    <option value="Senate">Senate</option>
+                    <option value="@bt" selected>@bt.ToString()</option>
                 }
                 else
                 {
-                    <option value="House">House</option>
-                    <option value="Senate" selected>Senate</option>
+                    <option value="@bt">@bt.ToString()</option>
                 }
-            </select>
+            }
+        </select>
+    </div>
+    <div class="col">
+        <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
+    </div>
+</div>
+@foreach (var bill in FilteredBills)
+    {
+<BSCollapseItem>
+    <div class="row m-1">
+        <div class="col-4">
+            <BSCollapseToggle>
+                @(context ? "-":"+")
+                @bill.DateIntroduced.ToString("MM/dd/yyyy")
+                <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
+                @bill.PrimarySubject
+            </BSCollapseToggle>
         </div>
         <div class="col">
-            <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
+            @bill.BillTitleShort
         </div>
     </div>
-    @foreach (var bill in FilteredBills)
-    {
-        <BSCollapseItem>
-            <div class="row m-1">
-                <div class="col-4">
-                    <BSCollapseToggle>
-                        @(context ? "-":"+")
-                        @bill.DateIntroduced.ToString("MM/dd/yyyy")
-                        <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
-                        @bill.PrimarySubject
-                    </BSCollapseToggle>
-                </div>
-                <div class="col">
-                    @bill.BillTitleShort
-                </div>
+    <BSCollapse>
+        <div class="row m-1">
+            <div class="col-12">
+                <h6>@bill.BillTitle</h6>
+                <p>sponsor: @bill.SponsorId</p>
+                <p>@bill.Summary</p>
+                <p>@bill.Committees</p>
+                <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
+
+
             </div>
-            <BSCollapse>
-                <div class="row m-1">
-                    <div class="col-12">
-                        <h6>@bill.BillTitle</h6>
-                        <p>sponsor: <a href="/MemberDetail/@bill.SponsorId" target="_blank">@bill.SponsorId</a></p>
-                        <p>@bill.Summary</p>
-                        <p>@bill.Committees</p>
-                        <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
-
-
-                    </div>
-                </div>
-            </BSCollapse>
-        </BSCollapseItem>
+        </div>
+    </BSCollapse>
+</BSCollapseItem>
     }
 }
 
 
 @code {
-    [Parameter] public string BillTypeParam { get; set; }
-    [Parameter] public string CurrentChamberParam { get; set; }
-    RecentBillType BillType;
-    Chamber CurrentChamber;
+    [Parameter] public RecentBillType BillType { get; set; }
+    [Parameter] public Chamber CurrentChamber { get; set; }
     RecentBillsContainer RecentBills;
     IEnumerable<RecentBill> FilteredBills;
     string CurrentFilter = "";
@@ -124,22 +121,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (string.IsNullOrEmpty(CurrentChamberParam))
+        if (CurrentChamber == Chamber.Unknown)
             CurrentChamber = Chamber.Senate;
-        else
-            CurrentChamber = (Chamber)Enum.Parse(typeof(Chamber), CurrentChamberParam);
-
-        if (string.IsNullOrEmpty(BillTypeParam))
+        if (BillType == RecentBillType.Unknown)
             BillType = RecentBillType.Active;
-        else
-            BillType = (RecentBillType)Enum.Parse(typeof(RecentBillType), BillTypeParam);
-
         await RetrieveRecentBills();
     }
 
     async Task RetrieveRecentBills()
     {
-        RecentBills = await CacheService.CallCacheableServerMethod<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
+        RecentBills = await Http.GetFromJsonAsync<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
         FilteredBills = RecentBills.Bills;
     }
 
