@@ -1,0 +1,137 @@
+﻿@page "/RecentBills"
+@page "/RecentBills/{CurrentChamber}"
+@using ProPublicaCongressAPI.Contracts
+@inject HttpClient Http
+
+<h1>Recent @BillType @CurrentChamber Bills</h1>
+
+@if (RecentBills == null)
+{
+<p><em>Loading...</em></p>
+}
+else
+{
+<div class="row">
+    <div class="col-2">
+        <select @onchange="ChamberChanged" class="form-control">
+            @if (BoundChamber == Chamber.House)
+            {
+            <option value="House" selected>House</option>
+            <option value="Senate">Senate</option>
+            }
+            else
+            {
+            <option value="House">House</option>
+            <option value="Senate" selected>Senate</option>
+            }
+        </select>
+    </div>
+    <div class="col-2">
+        <select @onchange="BillTypeChanged" class="form-control">
+            @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
+            {
+                if (bt == BillType)
+                {
+                    <option value="@bt" selected>@bt.ToString()</option>
+                }
+                else
+                {
+                    <option value="@bt">@bt.ToString()</option>
+                }
+            }
+        </select>
+    </div>
+    <div class="col">
+        <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
+    </div>
+</div>
+@foreach (var bill in FilteredBills)
+    {
+<BSCollapseItem>
+    <div class="row m-1">
+        <div class="col-4">
+            <BSCollapseToggle>
+                @(context ? "-":"+")
+                @bill.DateIntroduced.ToString("MM/dd/yyyy")
+                <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
+                @bill.PrimarySubject
+            </BSCollapseToggle>
+        </div>
+        <div class="col">
+            @bill.BillTitleShort
+        </div>
+    </div>
+    <BSCollapse>
+        <div class="row m-1">
+            <div class="col-12">
+                <h6>@bill.BillTitle</h6>
+                <p>sponsor: @bill.SponsorId</p>
+                <p>@bill.Summary</p>
+                <p>@bill.Committees</p>
+                <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
+
+
+            </div>
+        </div>
+    </BSCollapse>
+</BSCollapseItem>
+    }
+}
+
+
+@code {
+    [Parameter] public RecentBillType BillType { get; set; }
+    [Parameter] public Chamber CurrentChamber { get; set; }
+    RecentBillsContainer RecentBills;
+    IEnumerable<RecentBill> FilteredBills;
+    string CurrentFilter = "";
+
+    Chamber BoundChamber
+    {
+        get { return CurrentChamber; }
+        set
+        {
+            CurrentChamber = value;
+        }
+    }
+    string BoundFilter
+    {
+        get { return CurrentFilter; }
+        set
+        {
+            CurrentFilter = value;
+            FilteredBills = RecentBills.Bills.Where(s => (
+            s.PrimarySubject.Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase)
+            || s.BillTitle.Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase)
+            || s.Summary.Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase)));
+        }
+    }
+
+    async Task ChamberChanged(ChangeEventArgs args)
+    {
+        BoundChamber = (Chamber)Enum.Parse(typeof(Chamber), args.Value.ToString());
+        await RetrieveRecentBills();
+    }
+
+    async Task BillTypeChanged(ChangeEventArgs args)
+    {
+        BillType = (RecentBillType)Enum.Parse(typeof(RecentBillType), args.Value.ToString());
+        await RetrieveRecentBills();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (CurrentChamber == Chamber.Unknown)
+            CurrentChamber = Chamber.Senate;
+        if (BillType == RecentBillType.Unknown)
+            BillType = RecentBillType.Active;
+        await RetrieveRecentBills();
+    }
+
+    async Task RetrieveRecentBills()
+    {
+        RecentBills = await Http.GetFromJsonAsync<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
+        FilteredBills = RecentBills.Bills;
+    }
+
+}

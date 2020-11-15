@@ -40,5 +40,11 @@ namespace HillFacts.Server.Controllers
             var bills = await _propublica.GetRecentBillsByMember(id, RecentBillByMemberType.Introduced);
             return bills;
         }
+
+        public async Task<RecentBillsContainer> GetBills(Chamber chamber, RecentBillType billtype)
+        {
+            var bills = await _propublica.GetRecentBills(116, chamber, billtype);
+            return bills;
+        }
     }
 }
