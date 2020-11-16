@@ -130,7 +130,10 @@ else
                     @($" {member.LeadershipRole}")
                 </div>
                 <div class="col">
-                    @(!string.IsNullOrEmpty(member.District)?"District " + member.District + ",":string.Empty)
+                    @if (!string.IsNullOrEmpty(member.District))
+                    {
+                        <a target="_blank" href="https://www.govtrack.us/congress/members/@(member.State)#map">District @member.District</a>
+                    }
                     @member.State
                 </div>
                 @if (CurrentChamber == Chamber.Senate)

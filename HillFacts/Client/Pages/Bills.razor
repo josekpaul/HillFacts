@@ -1,5 +1,6 @@
 ﻿@page "/RecentBills"
-@page "/RecentBills/{CurrentChamber}"
+@page "/RecentBills/{CurrentChamberParam}"
+@page "/RecentBills/{CurrentChamberParam}/{BillTypeParam}"
 @using ProPublicaCongressAPI.Contracts
 @inject HttpClient Http
 
@@ -7,81 +8,83 @@
 
 @if (RecentBills == null)
 {
-<p><em>Loading...</em></p>
+    <p><em>Loading...</em></p>
 }
 else
 {
-<div class="row">
-    <div class="col-2">
-        <select @onchange="ChamberChanged" class="form-control">
-            @if (BoundChamber == Chamber.House)
-            {
-            <option value="House" selected>House</option>
-            <option value="Senate">Senate</option>
-            }
-            else
-            {
-            <option value="House">House</option>
-            <option value="Senate" selected>Senate</option>
-            }
-        </select>
-    </div>
-    <div class="col-2">
-        <select @onchange="BillTypeChanged" class="form-control">
-            @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
-            {
-                if (bt == BillType)
+    <div class="row">
+        <div class="col-2">
+            <select @onchange="ChamberChanged" class="form-control">
+                @if (BoundChamber == Chamber.House)
                 {
-                    <option value="@bt" selected>@bt.ToString()</option>
+                    <option value="House" selected>House</option>
+                    <option value="Senate">Senate</option>
                 }
                 else
                 {
-                    <option value="@bt">@bt.ToString()</option>
+                    <option value="House">House</option>
+                    <option value="Senate" selected>Senate</option>
                 }
-            }
-        </select>
-    </div>
-    <div class="col">
-        <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
-    </div>
-</div>
-@foreach (var bill in FilteredBills)
-    {
-<BSCollapseItem>
-    <div class="row m-1">
-        <div class="col-4">
-            <BSCollapseToggle>
-                @(context ? "-":"+")
-                @bill.DateIntroduced.ToString("MM/dd/yyyy")
-                <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
-                @bill.PrimarySubject
-            </BSCollapseToggle>
+            </select>
+        </div>
+        <div class="col-2">
+            <select @onchange="BillTypeChanged" class="form-control">
+                @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
+                {
+                    if (bt == BillType)
+                    {
+                        <option value="@bt" selected>@bt.ToString()</option>
+                    }
+                    else
+                    {
+                        <option value="@bt">@bt.ToString()</option>
+                    }
+                }
+            </select>
         </div>
         <div class="col">
-            @bill.BillTitleShort
+            <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
         </div>
     </div>
-    <BSCollapse>
-        <div class="row m-1">
-            <div class="col-12">
-                <h6>@bill.BillTitle</h6>
-                <p>sponsor: @bill.SponsorId</p>
-                <p>@bill.Summary</p>
-                <p>@bill.Committees</p>
-                <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
-
-
+    @foreach (var bill in FilteredBills)
+    {
+        <BSCollapseItem>
+            <div class="row m-1">
+                <div class="col-4">
+                    <BSCollapseToggle>
+                        @(context ? "-":"+")
+                        @bill.DateIntroduced.ToString("MM/dd/yyyy")
+                        <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
+                        @bill.PrimarySubject
+                    </BSCollapseToggle>
+                </div>
+                <div class="col">
+                    @bill.BillTitleShort
+                </div>
             </div>
-        </div>
-    </BSCollapse>
-</BSCollapseItem>
+            <BSCollapse>
+                <div class="row m-1">
+                    <div class="col-12">
+                        <h6>@bill.BillTitle</h6>
+                        <p>sponsor: <a href="/MemberDetail/@bill.SponsorId" target="_blank">@bill.SponsorId</a></p>
+                        <p>@bill.Summary</p>
+                        <p>@bill.Committees</p>
+                        <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
+
+
+                    </div>
+                </div>
+            </BSCollapse>
+        </BSCollapseItem>
     }
 }
 
 
 @code {
-    [Parameter] public RecentBillType BillType { get; set; }
-    [Parameter] public Chamber CurrentChamber { get; set; }
+    [Parameter] public string BillTypeParam { get; set; }
+    [Parameter] public string CurrentChamberParam { get; set; }
+    RecentBillType BillType;
+    Chamber CurrentChamber;
     RecentBillsContainer RecentBills;
     IEnumerable<RecentBill> FilteredBills;
     string CurrentFilter = "";
@@ -121,10 +124,16 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        if (CurrentChamber == Chamber.Unknown)
+        if (string.IsNullOrEmpty(CurrentChamberParam))
             CurrentChamber = Chamber.Senate;
-        if (BillType == RecentBillType.Unknown)
+        else
+            CurrentChamber = (Chamber)Enum.Parse(typeof(Chamber), CurrentChamberParam);
+
+        if (string.IsNullOrEmpty(BillTypeParam))
             BillType = RecentBillType.Active;
+        else
+            BillType = (RecentBillType)Enum.Parse(typeof(RecentBillType), BillTypeParam);
+
         await RetrieveRecentBills();
     }
 
