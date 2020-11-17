@@ -1,57 +1,48 @@
 ﻿@page "/memberdetail/{Id}"
-@using JSEmbed.Services
-@using System.ComponentModel
-@inject IMemberDetailViewModel ViewModel
-@if (ViewModel.Member != null)
+@using ProPublicaCongressAPI.Contracts
+@using JSEmbed.Services 
+@inject HttpClient Http
+
+<h3>Member Detail</h3>
+@if (Member != null)
 {
-    <h2>@ViewModel.Member.FirstName @ViewModel.Member.LastName</h2>
-    <hr />
-}
-<div class="row">
-    <div class="col-md-3 scrollcontainer-h-900">
-        @if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
+    <h2>@Member.FirstName @Member.LastName</h2>
+    <p>Born on @(Member.DateOfBirth.ToShortDateString()). @Member.TimesTopicsUrl </p>
+    {
+        var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
+        if (currentRole != null)
         {
-            <a class="twitter-timeline" href="https://twitter.com/@(ViewModel.Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(ViewModel.Member.TwitterAccount)</a>
-        }
-    </div>
-    <div class="col-md-9">
-        @if (ViewModel.Member != null)
-        {
-            <p>Born on @(ViewModel.Member.DateOfBirth.ToShortDateString()). @ViewModel.Member.TimesTopicsUrl </p>
+            <p>
+                Sponsored @currentRole.BillSponsoredCount bills.
+                Co-sponsored @currentRole.BillCosponsoredCount bills.
+            </p>
+            foreach (var committee in currentRole.Committees)
             {
-                var currentRole = ViewModel.Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
-                if (currentRole != null)
-                {
-                    <p>@currentRole.Chamber @currentRole.District @currentRole.State <small>@currentRole.StartDate.ToShortDateString() - @currentRole.EndDate.ToShortDateString()</small> </p>
-                    <p>
-                        Sponsored @currentRole.BillSponsoredCount bills.
-                        Co-sponsored @currentRole.BillCosponsoredCount bills.
-                    </p>
-                    foreach (var committee in currentRole.Committees)
-                    {
-                        <span>@committee.Name : @committee.RankInParty</span>
-                        <br />
-                    }
-                }
+                <span>@committee.Name : @committee.RankInParty</span>
+                <br />
             }
         }
-        else
-        {
-            <span>Loading..</span>
-        }
-        <hr />
+    }
+}
+else
+{
+    <span>Loading..</span>
+}
+<hr />
+<div class="row">
+    <div class="col-6">
 
         <h4>Recent Bills </h4>
-        @if (ViewModel.RecentSponsoredBills != null)
+        @if (RecentSponsoredBills != null)
         {
-            var sponsoredBillGroups = ViewModel.RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
+            var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
 
             foreach (var subjectGroup in sponsoredBillGroups)
             {
                 <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
             }
 
-            foreach (var g in ViewModel.RecentSponsoredBills.Bills)
+            foreach (var g in RecentSponsoredBills.Bills)
             {
                 <div class="row p-1">
                     <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
@@ -66,37 +57,33 @@
             <span>Loading Bill information..</span>
         }
     </div>
+    @if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+    {
+        <div class="col-6">
+            <h4>Social</h4>
+            <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
+        </div>
+
+    }
+
 </div>
 
 @code {
     [Parameter] public string Id { get; set; }
+    Member Member { get; set; }
+    RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
     [Inject]
     public JSEmbedService JSEmbedService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
-        ViewModel.MemberId = Id;
-        await ViewModel.GetMemberDetail();
+        Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
+        RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}");
 
-        if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
+        if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
         {
             await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
         }
     }
-
-    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
-    {
-        await InvokeAsync(() =>
-        {
-            StateHasChanged();
-        });
-    }
-
-    public void Dispose()
-    {
-        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
-    }
-
 
 }
