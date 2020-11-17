@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Client", "HillFac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfTimeline", "HfTimeline\HfTimeline.csproj", "{EF992FC3-A8AE-4906-A622-1D863030E423}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSEmbed", "JSEmbed\JSEmbed.csproj", "{AB2197FA-2A75-4F99-93A9-38867D3C92BD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,12 +49,17 @@ Global
 		{EF992FC3-A8AE-4906-A622-1D863030E423}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF992FC3-A8AE-4906-A622-1D863030E423}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF992FC3-A8AE-4906-A622-1D863030E423}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB2197FA-2A75-4F99-93A9-38867D3C92BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB2197FA-2A75-4F99-93A9-38867D3C92BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB2197FA-2A75-4F99-93A9-38867D3C92BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB2197FA-2A75-4F99-93A9-38867D3C92BD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EF992FC3-A8AE-4906-A622-1D863030E423} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
+		{AB2197FA-2A75-4F99-93A9-38867D3C92BD} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56688305-3ECD-4D9B-9796-90C2AE2A6C1B}

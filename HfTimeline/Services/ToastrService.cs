@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,10 +17,5 @@ namespace HfTimeline.Services
         {
             await _jsRuntime.InvokeVoidAsync("toastrFunctions.showToastrInfo");
         }
-    }
-    public static class ServiceCollectionExtension
-    {
-        public static IServiceCollection AddBlazorToastr(this IServiceCollection services)
-            => services.AddScoped<ToastrService>();
     }
 }

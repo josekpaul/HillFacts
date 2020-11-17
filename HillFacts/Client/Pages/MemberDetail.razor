@@ -1,5 +1,6 @@
 ﻿@page "/memberdetail/{Id}"
 @using ProPublicaCongressAPI.Contracts
+@using JSEmbed.Services 
 @inject HttpClient Http
 
 <h3>Member Detail</h3>
@@ -28,38 +29,61 @@ else
     <span>Loading..</span>
 }
 <hr />
-<h4>Recent Bills</h4>
-@if (RecentSponsoredBills != null)
-{
-    var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
+<div class="row">
+    <div class="col-6">
 
-    foreach (var subjectGroup in sponsoredBillGroups)
+        <h4>Recent Bills </h4>
+        @if (RecentSponsoredBills != null)
+        {
+            var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
+
+            foreach (var subjectGroup in sponsoredBillGroups)
+            {
+                <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+            }
+
+            foreach (var g in RecentSponsoredBills.Bills)
+            {
+                <div class="row p-1">
+                    <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
+                    <div class="col-2">@g.PrimarySubject</div>
+                    <div class="col-6">@g.BillTitle</div>
+                    <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
+                </div>
+            }
+        }
+        else
+        {
+            <span>Loading Bill information..</span>
+        }
+    </div>
+    @if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
     {
-        <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+        <div class="col-6">
+            <h4>Social</h4>
+            <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
+        </div>
+
     }
 
-        foreach (var g in RecentSponsoredBills.Bills)
-        {
-            <div class="row p-1">
-                <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
-                <div class="col-2">@g.PrimarySubject</div>
-                <div class="col-6">@g.BillTitle</div>
-                <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
-            </div>
-        }
-}
-else
-{
-    <span>Loading Bill information..</span>
-}
+</div>
+
 @code {
     [Parameter] public string Id { get; set; }
     Member Member { get; set; }
     RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
+    [Inject]
+    public JSEmbedService JSEmbedService { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
         RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}");
+
+        if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+        {
+            await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
+        }
     }
 
 }
