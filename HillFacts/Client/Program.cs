@@ -11,6 +11,7 @@ using BlazorStrap;
 using Blazor.Analytics;
 using HfTimeline;
 using HfTimeline.Services;
+using JSEmbed.Services;
 
 namespace HillFacts.Client
 {
@@ -25,6 +26,7 @@ namespace HillFacts.Client
             builder.Services.AddBootstrapCss();
             builder.Services.AddGoogleAnalytics("G-TN4Z59Z2QV");
             builder.Services.AddBlazorToastr();
+            builder.Services.AddJsEmbed();
             await builder.Build().RunAsync();
         }
     }

@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\HfTimeline\HfTimeline.csproj" />
+    <ProjectReference Include="..\..\JSEmbed\JSEmbed.csproj" />
     <ProjectReference Include="..\..\ProPublicaCongressAPI.Contracts\ProPublicaCongressAPI.Contracts.csproj" />
   </ItemGroup>
 
