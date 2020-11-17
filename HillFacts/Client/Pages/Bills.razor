@@ -14,20 +14,6 @@ else
 {
     <div class="row">
         <div class="col-2">
-            <select @onchange="ChamberChanged" class="form-control">
-                @if (BoundChamber == Chamber.House)
-                {
-                    <option value="House" selected>House</option>
-                    <option value="Senate">Senate</option>
-                }
-                else
-                {
-                    <option value="House">House</option>
-                    <option value="Senate" selected>Senate</option>
-                }
-            </select>
-        </div>
-        <div class="col-2">
             <select @onchange="BillTypeChanged" class="form-control">
                 @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
                 {
@@ -39,6 +25,20 @@ else
                     {
                         <option value="@bt">@bt.ToString()</option>
                     }
+                }
+            </select>
+        </div>
+        <div class="col-2">
+            <select @onchange="ChamberChanged" class="form-control">
+                @if (BoundChamber == Chamber.House)
+                {
+                    <option value="House" selected>House</option>
+                    <option value="Senate">Senate</option>
+                }
+                else
+                {
+                    <option value="House">House</option>
+                    <option value="Senate" selected>Senate</option>
                 }
             </select>
         </div>
