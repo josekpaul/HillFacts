@@ -1,0 +1,52 @@
+﻿@inject HttpClient Http
+<CascadingValue Value="this">
+    @ChildContent
+</CascadingValue>
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    public Dictionary<string, object> AppState { get; set; }
+
+    protected override void OnInitialized()
+    {
+        AppState = new Dictionary<string, object>();
+        base.OnInitialized();
+    }
+
+    public T GetValue<T>(string key)
+    {
+        if (AppState.ContainsKey(key))
+        {
+            try
+            {
+                return (T)AppState[key];
+            }
+            catch { }
+        }
+        return default(T);
+    }
+
+    public void SetValue(string key, object value)
+    {
+        if (AppState.ContainsKey(key))
+        {
+            AppState[key] = value;
+        }
+        else
+        {
+            AppState.Add(key, value);
+        }
+    }
+
+    public async Task<T> CallCacheableServerMethod<T>(string query)
+    {
+        var b = GetValue<T>(query);
+        if (b == null)
+        {
+            b = await Http.GetFromJsonAsync<T>(query);
+            SetValue(query, b);
+        }
+        return b;
+    }
+}
