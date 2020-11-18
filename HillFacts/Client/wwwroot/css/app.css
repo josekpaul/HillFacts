@@ -38,3 +38,8 @@
     background-color: #de0100;
     color: rgba(255,255,255, 0.8);
 }
+
+.scrollcontainer-h-900 {
+    height: 900px;
+    overflow-y: scroll;
+}

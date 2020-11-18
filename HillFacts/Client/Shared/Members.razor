@@ -181,6 +181,7 @@ else
 
 @code {
     [Parameter] public Chamber CurrentChamber { get; set; }
+    [CascadingParameter] public CascadingAppState AppState { get; set; }
     IEnumerable<MemberSummary> ChamberMembers;
     IEnumerable<MemberSummary> FilteredMembers;
     string CurrentFilter = "";
@@ -270,7 +271,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        ChamberMembers = await Http.GetFromJsonAsync<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
+        ChamberMembers = await AppState.CallCacheableServerMethod<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
         FilteredMembers = ChamberMembers;
     }
 

@@ -1,37 +1,46 @@
 ﻿@page "/memberdetail/{Id}"
 @using ProPublicaCongressAPI.Contracts
-@using JSEmbed.Services 
-@using System.Threading 
+@using JSEmbed.Services
 @inject HttpClient Http
-
-<h3>Member Detail</h3>
 @if (Member != null)
 {
-    <h2>@Member.FirstName @Member.LastName</h2>
-    <p>Born on @(Member.DateOfBirth.ToShortDateString()). @Member.TimesTopicsUrl </p>
-    {
-        var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
-        if (currentRole != null)
+<h2>@Member.FirstName @Member.LastName</h2>
+<hr />
+}
+<div class="row">
+    <div class="col-md-3 scrollcontainer-h-900">
+        <h6>Social</h6>
+        @if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
         {
-            <p>
-                Sponsored @currentRole.BillSponsoredCount bills.
-                Co-sponsored @currentRole.BillCosponsoredCount bills.
-            </p>
-            foreach (var committee in currentRole.Committees)
+            <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
+        }
+    </div>
+    <div class="col-md-9">
+        @if (Member != null)
+        {
+        <p>Born on @(Member.DateOfBirth.ToShortDateString()). @Member.TimesTopicsUrl </p>
             {
-                <span>@committee.Name : @committee.RankInParty</span>
-                <br />
+                var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
+                if (currentRole != null)
+                {
+        <p>@currentRole.Chamber @currentRole.District @currentRole.State <small>@currentRole.StartDate.ToShortDateString() - @currentRole.EndDate.ToShortDateString()</small> </p>
+        <p>
+            Sponsored @currentRole.BillSponsoredCount bills.
+            Co-sponsored @currentRole.BillCosponsoredCount bills.
+        </p>
+                    foreach (var committee in currentRole.Committees)
+                    {
+        <span>@committee.Name : @committee.RankInParty</span>
+        <br />
+                    }
+                }
             }
         }
-    }
-}
-else
-{
-    <span>Loading..</span>
-}
-<hr />
-<div class="row">
-    <div class="col-12">
+        else
+        {
+        <span>Loading..</span>
+        }
+        <hr />
 
         <h4>Recent Bills </h4>
         @if (RecentSponsoredBills != null)
@@ -40,62 +49,42 @@ else
 
             foreach (var subjectGroup in sponsoredBillGroups)
             {
-                <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+        <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
             }
 
             foreach (var g in RecentSponsoredBills.Bills)
             {
-                <div class="row p-1">
-                    <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
-                    <div class="col-2">@g.PrimarySubject</div>
-                    <div class="col-6">@g.BillTitle</div>
-                    <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
-                </div>
+        <div class="row p-1">
+            <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
+            <div class="col-2">@g.PrimarySubject</div>
+            <div class="col-6">@g.BillTitle</div>
+            <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
+        </div>
             }
         }
         else
         {
-            <span>Loading Bill information..</span>
+        <span>Loading Bill information..</span>
         }
     </div>
-    @if (Member?.HasTwitter == true)
-    {
-        <div class="col-6">
-            <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
-        </div>
-    }
-    @*@if (Member?.HasFacebook == true)
-    {
-<div class="col-6">
-    <div class="fb-page" data-href="https://www.facebook.com/@(Member.FacebookAccount)" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/@(Member.FacebookAccount)" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/@(Member.FacebookAccount)">@(Member.FacebookAccount)</a></blockquote></div>
-</div>
-    
-    }*@
-
 </div>
 
 @code {
     [Parameter] public string Id { get; set; }
+    [CascadingParameter] public CascadingAppState AppState { get; set; }
     Member Member { get; set; }
     RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
     [Inject]
     public JSEmbedService JSEmbedService { get; set; }
-    [Inject]
-    public NavigationManager NavigationManager { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
-        Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
-        RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}");
-
-        if (Member?.HasTwitter == true)
+        Member = await AppState.CallCacheableServerMethod<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
+        RecentSponsoredBills = await AppState.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}"); ;
+        if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
         {
             await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
         }
-        //if (Member?.HasFacebook == true)
-        //{
-        //    await JSEmbedService.RunRemoteJS("https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0", null, "");
-        //}
     }
-
 
 }
