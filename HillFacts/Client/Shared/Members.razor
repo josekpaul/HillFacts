@@ -181,6 +181,10 @@ else
 
 @code {
     [Parameter] public Chamber CurrentChamber { get; set; }
+    [CascadingParameter] public CascadingAppState AppState { get; set; }
+    IEnumerable<MemberSummary> ChamberMembers;
+    IEnumerable<MemberSummary> FilteredMembers;
+    string CurrentFilter = "";
     int CurrentYear = DateTime.Today.Year;
 
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
@@ -201,7 +205,9 @@ else
 
     public void Dispose()
     {
-        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+        //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+        ChamberMembers = await AppState.CallCacheableServerMethod<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
+        FilteredMembers = ChamberMembers;
     }
 
 }

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HillFacts.Client", "HillFac
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfTimeline", "HfTimeline\HfTimeline.csproj", "{EF992FC3-A8AE-4906-A622-1D863030E423}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JSEmbed", "JSEmbed\JSEmbed.csproj", "{AB2197FA-2A75-4F99-93A9-38867D3C92BD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSEmbed", "JSEmbed\JSEmbed.csproj", "{AB2197FA-2A75-4F99-93A9-38867D3C92BD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
