@@ -1,6 +1,7 @@
 ﻿@page "/memberdetail/{Id}"
 @using ProPublicaCongressAPI.Contracts
 @using JSEmbed.Services 
+@using System.Threading 
 @inject HttpClient Http
 
 <h3>Member Detail</h3>
@@ -30,7 +31,7 @@ else
 }
 <hr />
 <div class="row">
-    <div class="col-6">
+    <div class="col-12">
 
         <h4>Recent Bills </h4>
         @if (RecentSponsoredBills != null)
@@ -57,14 +58,19 @@ else
             <span>Loading Bill information..</span>
         }
     </div>
-    @if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+    @if (Member?.HasTwitter == true)
     {
         <div class="col-6">
-            <h4>Social</h4>
             <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
         </div>
-
     }
+    @*@if (Member?.HasFacebook == true)
+    {
+<div class="col-6">
+    <div class="fb-page" data-href="https://www.facebook.com/@(Member.FacebookAccount)" data-tabs="timeline" data-width="" data-height="" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="true"><blockquote cite="https://www.facebook.com/@(Member.FacebookAccount)" class="fb-xfbml-parse-ignore"><a href="https://www.facebook.com/@(Member.FacebookAccount)">@(Member.FacebookAccount)</a></blockquote></div>
+</div>
+    
+    }*@
 
 </div>
 
@@ -74,16 +80,22 @@ else
     RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
     [Inject]
     public JSEmbedService JSEmbedService { get; set; }
-
+    [Inject]
+    public NavigationManager NavigationManager { get; set; }
     protected override async Task OnInitializedAsync()
     {
         Member = await Http.GetFromJsonAsync<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
         RecentSponsoredBills = await Http.GetFromJsonAsync<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}");
 
-        if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+        if (Member?.HasTwitter == true)
         {
             await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
         }
+        //if (Member?.HasFacebook == true)
+        //{
+        //    await JSEmbedService.RunRemoteJS("https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0", null, "");
+        //}
     }
+
 
 }

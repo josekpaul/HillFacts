@@ -13,9 +13,9 @@ namespace JSEmbed.Services
         {
             _jsRuntime = jSRuntime;
         }
-        public async Task RunRemoteJS(string sourceUrl, string onLoadHandler = null)
+        public async Task RunRemoteJS(string sourceUrl, string onLoadHandler = null, string nonce = null)
         {
-            await _jsRuntime.InvokeVoidAsync("jsEmbed.runRemoteJs", sourceUrl, onLoadHandler);
+            await _jsRuntime.InvokeVoidAsync("jsEmbed.runRemoteJs", sourceUrl, onLoadHandler, nonce);
         }
     }
 }
