@@ -2,7 +2,7 @@
 @page "/RecentBills/{CurrentChamberParam}"
 @page "/RecentBills/{CurrentChamberParam}/{BillTypeParam}"
 @using ProPublicaCongressAPI.Contracts
-@inject HttpClient Http
+@inject IAppCacheService CacheService
 
 <h1>Recent @BillType @CurrentChamber Bills</h1>
 
@@ -139,7 +139,7 @@ else
 
     async Task RetrieveRecentBills()
     {
-        RecentBills = await Http.GetFromJsonAsync<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
+        RecentBills = await CacheService.CallCacheableServerMethod<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
         FilteredBills = RecentBills.Bills;
     }
 
