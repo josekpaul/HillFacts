@@ -1,7 +1,8 @@
 ﻿@page "/memberdetail/{Id}"
 @using ProPublicaCongressAPI.Contracts
 @using JSEmbed.Services
-@inject HttpClient Http
+@inject IAppCacheService CacheService
+
 @if (Member != null)
 {
 <h2>@Member.FirstName @Member.LastName</h2>
@@ -79,8 +80,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Member = await AppState.CallCacheableServerMethod<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
-        RecentSponsoredBills = await AppState.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}"); ;
+        Member = await CacheService.CallCacheableServerMethod<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
+        RecentSponsoredBills = await CacheService.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}"); ;
         if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
         {
             await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
