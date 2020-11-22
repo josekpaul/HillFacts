@@ -32,6 +32,8 @@ namespace HillFacts.Client
             builder.Services.AddSingleton<IAppCacheService>(new AppCacheService(http));
 
             builder.Services.AddScoped<IMembersViewModel, MembersViewModel>();
+            builder.Services.AddScoped<IMemberDetailViewModel, MemberDetailViewModel>();
+
             await builder.Build().RunAsync();
         }
     }
