@@ -118,7 +118,6 @@ namespace HillFacts.Client.ViewModels
 
         public async Task GetMembers()
         {
-            //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
             chamberMembers = await cacheService.CallCacheableServerMethod<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
             FilteredMembers = chamberMembers;
         }

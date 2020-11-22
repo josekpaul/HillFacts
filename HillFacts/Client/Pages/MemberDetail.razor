@@ -1,91 +1,102 @@
 ﻿@page "/memberdetail/{Id}"
-@using ProPublicaCongressAPI.Contracts
 @using JSEmbed.Services
-@inject IAppCacheService CacheService
-
-@if (Member != null)
+@using System.ComponentModel
+@inject IMemberDetailViewModel ViewModel
+@if (ViewModel.Member != null)
 {
-<h2>@Member.FirstName @Member.LastName</h2>
-<hr />
+    <h2>@ViewModel.Member.FirstName @ViewModel.Member.LastName</h2>
+    <hr />
 }
 <div class="row">
     <div class="col-md-3 scrollcontainer-h-900">
-        <h6>Social</h6>
-        @if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+        @if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
         {
-            <a class="twitter-timeline" href="https://twitter.com/@(Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(Member.TwitterAccount)</a>
+            <a class="twitter-timeline" href="https://twitter.com/@(ViewModel.Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(ViewModel.Member.TwitterAccount)</a>
         }
     </div>
     <div class="col-md-9">
-        @if (Member != null)
+        @if (ViewModel.Member != null)
         {
-        <p>Born on @(Member.DateOfBirth.ToShortDateString()). @Member.TimesTopicsUrl </p>
+            <p>Born on @(ViewModel.Member.DateOfBirth.ToShortDateString()). @ViewModel.Member.TimesTopicsUrl </p>
             {
-                var currentRole = Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
+                var currentRole = ViewModel.Member.Roles.Where(r => r.Congress == 116).FirstOrDefault();
                 if (currentRole != null)
                 {
-        <p>@currentRole.Chamber @currentRole.District @currentRole.State <small>@currentRole.StartDate.ToShortDateString() - @currentRole.EndDate.ToShortDateString()</small> </p>
-        <p>
-            Sponsored @currentRole.BillSponsoredCount bills.
-            Co-sponsored @currentRole.BillCosponsoredCount bills.
-        </p>
+                    <p>@currentRole.Chamber @currentRole.District @currentRole.State <small>@currentRole.StartDate.ToShortDateString() - @currentRole.EndDate.ToShortDateString()</small> </p>
+                    <p>
+                        Sponsored @currentRole.BillSponsoredCount bills.
+                        Co-sponsored @currentRole.BillCosponsoredCount bills.
+                    </p>
                     foreach (var committee in currentRole.Committees)
                     {
-        <span>@committee.Name : @committee.RankInParty</span>
-        <br />
+                        <span>@committee.Name : @committee.RankInParty</span>
+                        <br />
                     }
                 }
             }
         }
         else
         {
-        <span>Loading..</span>
+            <span>Loading..</span>
         }
         <hr />
 
         <h4>Recent Bills </h4>
-        @if (RecentSponsoredBills != null)
+        @if (ViewModel.RecentSponsoredBills != null)
         {
-            var sponsoredBillGroups = RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
+            var sponsoredBillGroups = ViewModel.RecentSponsoredBills.Bills.GroupBy(b => b.PrimarySubject);
 
             foreach (var subjectGroup in sponsoredBillGroups)
             {
-        <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+                <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
             }
 
-            foreach (var g in RecentSponsoredBills.Bills)
+            foreach (var g in ViewModel.RecentSponsoredBills.Bills)
             {
-        <div class="row p-1">
-            <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
-            <div class="col-2">@g.PrimarySubject</div>
-            <div class="col-6">@g.BillTitle</div>
-            <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
-        </div>
+                <div class="row p-1">
+                    <div class="col-1">@g.DateIntroduced.ToShortDateString()</div>
+                    <div class="col-2">@g.PrimarySubject</div>
+                    <div class="col-6">@g.BillTitle</div>
+                    <div class="col-3">@g.LatestMajorAction (@g.DateLatestMajorAction.ToShortDateString())</div>
+                </div>
             }
         }
         else
         {
-        <span>Loading Bill information..</span>
+            <span>Loading Bill information..</span>
         }
     </div>
 </div>
 
 @code {
     [Parameter] public string Id { get; set; }
-    [CascadingParameter] public CascadingAppState AppState { get; set; }
-    Member Member { get; set; }
-    RecentBillsByMemberContainer RecentSponsoredBills { get; set; }
     [Inject]
     public JSEmbedService JSEmbedService { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        Member = await CacheService.CallCacheableServerMethod<Member>($"/api/Propublica/GetMemberDetail?id={Id}");
-        RecentSponsoredBills = await CacheService.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={Id}"); ;
-        if (!string.IsNullOrWhiteSpace(Member?.TwitterAccount))
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.MemberId = Id;
+        await ViewModel.GetMemberDetail();
+
+        if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
         {
             await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
         }
     }
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
 
 }
