@@ -1,107 +1,107 @@
-﻿@using ProPublicaCongressAPI.Contracts
-@inject IAppCacheService CacheService
+﻿@using System.ComponentModel
+@inject IMembersViewModel ViewModel
 
 <h1>@CurrentChamber Members</h1>
 
-@if (ChamberMembers == null)
+@if (ViewModel.FilteredMembers == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <input @bind="BoundFilter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control" />
+    <input @bind="ViewModel.Filter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control" />
     <div class="row">
         <div class="col-4">
         </div>
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.StateAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             State
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.StateDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
         @if (CurrentChamber == Chamber.Senate)
         {
             <div class="col">
-                <svg @onclick="(s=> BoundSort = SortCriteria.ElectionYearAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
                           d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
                 </svg>
                 <br />
                 Next Election
                 <br />
-                <svg @onclick="(s=> BoundSort = SortCriteria.ElectionYearDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
                 </svg>
             </div>
         }
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.AgeAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             Age
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.AgeDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.SeniorityAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             Seniority
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.SeniorityDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.PercentPartyVoteAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             % Votes with Party
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.PercentPartyVoteDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.PercentVoteMissAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             % Votes Missed
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.PercentVoteMissDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
         <div class="col">
-            <svg @onclick="(s=> BoundSort = SortCriteria.MissedVotesAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd"
                       d="M8 12a.5.5 0 0 0 .5-.5V5.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L7.5 5.707V11.5a.5.5 0 0 0 .5.5z" />
             </svg>
             <br />
             Missed Votes
             <br />
-            <svg @onclick="(s=> BoundSort = SortCriteria.MissedVotesDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <svg @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-short ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                 <path fill-rule="evenodd" d="M8 4a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L7.5 10.293V4.5A.5.5 0 0 1 8 4z" />
             </svg>
         </div>
     </div>
-    @foreach (var member in FilteredMembers)
+    @foreach (var member in ViewModel.FilteredMembers)
     {
         <BSCollapseItem>
             <div class="row">
@@ -181,97 +181,27 @@ else
 
 @code {
     [Parameter] public Chamber CurrentChamber { get; set; }
-    IEnumerable<MemberSummary> ChamberMembers;
-    IEnumerable<MemberSummary> FilteredMembers;
-    string CurrentFilter = "";
     int CurrentYear = DateTime.Today.Year;
-    enum SortCriteria
-    {
-        None, StateAsc, StateDesc, AgeAsc, AgeDesc, ElectionYearAsc, ElectionYearDesc, PercentPartyVoteAsc, PercentPartyVoteDesc, PercentVoteMissAsc,
-        PercentVoteMissDesc, TotalVoteAsc, TotalVoteDesc, SeniorityAsc, SeniorityDesc, MissedVotesAsc, MissedVotesDesc
-    }
-    SortCriteria CurrentSort = SortCriteria.None;
 
-    string BoundFilter
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
     {
-        get { return CurrentFilter; }
-        set
+        await InvokeAsync(() =>
         {
-            CurrentFilter = value;
-            if (CurrentFilter.Length == 2)
-            {
-                FilteredMembers = ChamberMembers.Where(s => s.State.Equals(CurrentFilter, StringComparison.OrdinalIgnoreCase));
-            }
-            else
-            {
-                FilteredMembers = ChamberMembers.Where(s => (s.State + " " + s.FirstName + " " + s.LastName).Contains(CurrentFilter, StringComparison.OrdinalIgnoreCase));
-            }
-        }
+            StateHasChanged();
+        });
     }
 
-    SortCriteria BoundSort
+    protected override Task OnInitializedAsync()
     {
-        get { return CurrentSort; }
-        set
-        {
-            CurrentSort = value;
-            if (CurrentSort != SortCriteria.None)
-            {
-                switch (CurrentSort)
-                {
-                    case SortCriteria.AgeAsc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.DateOfBirth);
-                        break;
-                    case SortCriteria.AgeDesc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.DateOfBirth);
-                        break;
-                    case SortCriteria.ElectionYearAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.NextElection);
-                        break;
-                    case SortCriteria.MissedVotesAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.MissedVotes);
-                        break;
-                    case SortCriteria.PercentPartyVoteAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.PercentageOVotesWithParty);
-                        break;
-                    case SortCriteria.SeniorityAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.Seniority);
-                        break;
-                    case SortCriteria.PercentVoteMissAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.PercentageOfVotesMissed);
-                        break;
-                    case SortCriteria.StateAsc:
-                        FilteredMembers = FilteredMembers.OrderBy(m => m.State).ThenBy(m=>m.District);
-                        break;
-                    case SortCriteria.StateDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.State).ThenByDescending(m => m.District);
-                        break;
-                    case SortCriteria.ElectionYearDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.NextElection);
-                        break;
-                    case SortCriteria.MissedVotesDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.MissedVotes);
-                        break;
-                    case SortCriteria.PercentPartyVoteDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.PercentageOVotesWithParty);
-                        break;
-                    case SortCriteria.SeniorityDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.Seniority);
-                        break;
-                    case SortCriteria.PercentVoteMissDesc:
-                        FilteredMembers = FilteredMembers.OrderByDescending(m => m.PercentageOfVotesMissed);
-                        break;
-                    default: return;
-                }
-            }
-        }
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.CurrentChamber = CurrentChamber;
+        ViewModel.GetMembers();
+        return base.OnInitializedAsync();
     }
 
-    protected override async Task OnInitializedAsync()
+    public void Dispose()
     {
-        //        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
-        ChamberMembers = await CacheService.CallCacheableServerMethod<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
-        FilteredMembers = ChamberMembers;
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
     }
 
 }

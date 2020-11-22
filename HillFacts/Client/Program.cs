@@ -13,6 +13,7 @@ using HfTimeline;
 using HfTimeline.Services;
 using JSEmbed.Services;
 using HillFacts.Client.Services;
+using HillFacts.Client.ViewModels;
 
 namespace HillFacts.Client
 {
@@ -29,6 +30,8 @@ namespace HillFacts.Client
             builder.Services.AddBlazorToastr();
             builder.Services.AddJsEmbed();
             builder.Services.AddSingleton<IAppCacheService>(new AppCacheService(http));
+
+            builder.Services.AddScoped<IMembersViewModel, MembersViewModel>();
             await builder.Build().RunAsync();
         }
     }
