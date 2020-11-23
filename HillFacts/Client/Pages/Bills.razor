@@ -139,7 +139,7 @@ else
 
     async Task RetrieveRecentBills()
     {
-        RecentBills = await CacheService.CallCacheableServerMethod<RecentBillsContainer>($"/api/Propublica/GetBills?chamber={CurrentChamber}&billtype={BillType}");
+        RecentBills = await CacheService.CallCacheableServerMethod<RecentBillsContainer>($"/api/PropublicaCongress/GetBills?chamber={CurrentChamber}&billtype={BillType}");
         FilteredBills = RecentBills.Bills;
     }
 

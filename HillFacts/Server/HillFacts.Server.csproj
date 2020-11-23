@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Propublica.CampaignFinance.Api\Propublica.CampaignFinance.Api.csproj" />
     <ProjectReference Include="..\..\ProPublicaCongressAPI.Contracts\ProPublicaCongressAPI.Contracts.csproj" />
     <ProjectReference Include="..\..\ProPublicaCongressAPI\ProPublicaCongressAPI.csproj" />
     <ProjectReference Include="..\Client\HillFacts.Client.csproj" />

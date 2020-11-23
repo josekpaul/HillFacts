@@ -118,7 +118,7 @@ namespace HillFacts.Client.ViewModels
 
         public async Task GetMembers()
         {
-            chamberMembers = await cacheService.CallCacheableServerMethod<List<MemberSummary>>($"/api/Propublica/GetMembers?chamber={CurrentChamber.ToString()}");
+            chamberMembers = await cacheService.CallCacheableServerMethod<List<MemberSummary>>($"/api/PropublicaCongress/GetMembers?chamber={CurrentChamber.ToString()}");
             FilteredMembers = chamberMembers;
         }
     }
