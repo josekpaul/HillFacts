@@ -19,13 +19,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HfTimeline", "HfTimeline\Hf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JSEmbed", "JSEmbed\JSEmbed.csproj", "{AB2197FA-2A75-4F99-93A9-38867D3C92BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propublica.CampaignFinance.Api", "Propublica.CampaignFinance.Api\Propublica.CampaignFinance.Api.csproj", "{99CEFB7E-5D7C-44EE-ABE9-BC5BEC0DEE8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propublica.CampaignFinance.Api", "Propublica.CampaignFinance.Api\Propublica.CampaignFinance.Api.csproj", "{99CEFB7E-5D7C-44EE-ABE9-BC5BEC0DEE8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propublica.CampaignFinance.Api.Contracts", "Propublica.CampaignFinance.Api.Contracts\Propublica.CampaignFinance.Api.Contracts.csproj", "{C9FF5454-A558-408E-9C2A-943307D17141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propublica.CampaignFinance.Api.Contracts", "Propublica.CampaignFinance.Api.Contracts\Propublica.CampaignFinance.Api.Contracts.csproj", "{C9FF5454-A558-408E-9C2A-943307D17141}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53362DE9-9C72-4FAF-BC5C-807F6AC77CC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Propublica.CampaignFinance.Api.Tests", "Propublica.Campaign.Finance.Api.Tests\Propublica.CampaignFinance.Api.Tests.csproj", "{8C306103-8721-4337-9C6E-B43F4AA2B6DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propublica.CampaignFinance.Api.Tests", "Propublica.Campaign.Finance.Api.Tests\Propublica.CampaignFinance.Api.Tests.csproj", "{8C306103-8721-4337-9C6E-B43F4AA2B6DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

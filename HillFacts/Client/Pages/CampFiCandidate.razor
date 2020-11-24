@@ -1,0 +1,42 @@
+﻿@page "/CampFiCandidate/{Cycle}/{FecId}"
+@using System.ComponentModel
+@inject ICampFiCandidateViewModel ViewModel
+@if(ViewModel.Candidate == null)
+{
+    <span>Loading.. </span>
+}
+else
+{
+    <h3>@ViewModel.Candidate.Results[0].DisplayName</h3>
+}
+
+
+@code {
+    [Parameter]
+    public string Cycle { get; set; }
+    [Parameter]
+    public string FecId { get; set; }
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.Cycle = Cycle;
+        ViewModel.FecId = FecId;
+        ViewModel.GetCandidate();
+        return base.OnInitializedAsync();
+
+    }
+}

@@ -33,6 +33,9 @@ namespace HillFacts.Client
 
             builder.Services.AddScoped<IMembersViewModel, MembersViewModel>();
             builder.Services.AddScoped<IMemberDetailViewModel, MemberDetailViewModel>();
+            builder.Services.AddScoped<ICampFiSearchViewModel, CampFiSearchViewModel>();
+            builder.Services.AddScoped<ICampFiCandidateViewModel, CampFiCandidateViewModel>();
+
             await builder.Build().RunAsync();
         }
     }
