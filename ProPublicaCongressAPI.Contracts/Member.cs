@@ -37,7 +37,10 @@ namespace ProPublicaCongressAPI.Contracts
 
         public string TwitterAccount { get; set; }
 
+        public bool HasTwitter => !string.IsNullOrWhiteSpace(TwitterAccount);
+
         public string FacebookAccount { get; set; }
+        public bool HasFacebook => !string.IsNullOrWhiteSpace(FacebookAccount);
 
         [Obsolete("This property is no longer returned by the API and should not be used")]
         public long? FacebookId { get; set; }

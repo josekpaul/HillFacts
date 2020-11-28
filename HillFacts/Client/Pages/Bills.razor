@@ -13,7 +13,7 @@
 else
 {
     <div class="row">
-        <div class="col-2">
+        <div class="col-md-2">
             <select @onchange="BillTypeChanged" class="form-control">
                 @foreach (var bt in (RecentBillType[])Enum.GetValues(typeof(RecentBillType)))
                 {
@@ -28,7 +28,7 @@ else
                 }
             </select>
         </div>
-        <div class="col-2">
+        <div class="col-md-2">
             <select @onchange="ChamberChanged" class="form-control">
                 @if (BoundChamber == Chamber.House)
                 {
@@ -42,41 +42,67 @@ else
                 }
             </select>
         </div>
-        <div class="col">
+        <div class="col-md-6">
             <input @bind="BoundFilter" placeholder="press enter after filter-text" class="form-control" />
         </div>
     </div>
-    @foreach (var bill in FilteredBills)
-    {
-        <BSCollapseItem>
-            <div class="row m-1">
-                <div class="col-4">
-                    <BSCollapseToggle>
-                        @(context ? "-":"+")
-                        @bill.DateIntroduced.ToString("MM/dd/yyyy")
-                        <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
-                        @bill.PrimarySubject
-                    </BSCollapseToggle>
-                </div>
-                <div class="col">
-                    @bill.BillTitleShort
-                </div>
-            </div>
-            <BSCollapse>
-                <div class="row m-1">
-                    <div class="col-12">
-                        <h6>@bill.BillTitle</h6>
-                        <p>sponsor: <a href="/MemberDetail/@bill.SponsorId" target="_blank">@bill.SponsorId</a></p>
-                        <p>@bill.Summary</p>
-                        <p>@bill.Committees</p>
-                        <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var bill in FilteredBills)
+                {
+                    <BSCollapseItem>
+                        <tr>
+                            <td>
+                                <BSCollapseToggle>
+                                    @(context ? "-":"+")
+                                    <a href="@bill.GovTrackUrl" target="_blank">@bill.BillNumber</a>
+                                </BSCollapseToggle>
+
+                            </td>
+                            <td>
+                                @bill.DateIntroduced.ToString("MM/dd/yyyy")
+
+                            </td>
+                            <td>
+                                @bill.PrimarySubject
+                            </td>
+                            <td>
+                                @bill.BillTitleShort
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="4">
+                                <BSCollapse>
+
+                                    <h6>@bill.BillTitle</h6>
+                                    <p>Sponsor: <a href="/MemberDetail/@bill.SponsorId" target="_blank">@bill.SponsorId</a></p>
+                                    <p>@bill.Summary</p>
+                                    <p>@bill.Committees</p>
+                                    <p>@bill.LatestMajorAction on @bill.DateLatestMajorAction.ToShortDateString()</p>
+
+                                </BSCollapse>
+
+                            </td>
+
+                        </tr>
+
+                    </BSCollapseItem>
 
 
-                    </div>
-                </div>
-            </BSCollapse>
-        </BSCollapseItem>
-    }
+                }
+            </tbody>
+        </table>
+    </div>
+ 
 }
 
 
