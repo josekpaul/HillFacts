@@ -1,0 +1,73 @@
+﻿@page "/CampFiSearch"
+@page "/CampFiSearch/{Query}"
+@page "/CampFiSearch/{Cycle}/{Query}"
+@using System.ComponentModel
+@inject ICampFiSearchViewModel ViewModel
+<div class="row">
+    <div class="col-sm-3">
+        <select class="form-control" @bind="ViewModel.Cycle">
+            @foreach (var c in Cycles)
+            {
+                if (c == ViewModel.Cycle)
+                { <option value="@c" selected>@c</option> }
+                else
+                { <option value="@c">@c</option> }
+            }
+        </select>
+    </div>
+    <div class="col-sm-9">
+        <input class="form-control" @bind="ViewModel.Query" type="text" placeholder="search" />
+    </div>
+</div>
+@if (ViewModel.SearchResults == null)
+{
+    <span>Loading..</span>
+}
+else
+{
+    foreach (var result in ViewModel.SearchResults)
+    {
+        <div class="row">
+            <div class="col-md-4"><a href="campficandidate/@ViewModel.Cycle/@result.Candidate.Id">@result.Candidate.Name</a></div>
+            <div class="col-md-4">@result.Candidate.Party</div>
+            <div class="col-md-4">@result.District @result.State</div>
+            <div class="col-md-4">@result.Committee</div>
+        </div>
+    }
+}
+
+
+@code {
+    [Parameter]
+    public string Query { get; set; }
+    [Parameter]
+    public string Cycle { get; set; }
+
+    string[] Cycles = new string[] { "2010", "2012", "2014", "2016", "2018", "2020" };
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+
+        if (Cycle != ViewModel.Cycle && !string.IsNullOrEmpty(Cycle))
+            ViewModel.Cycle = Cycle;
+        if (Query != ViewModel.Query && !string.IsNullOrEmpty(Query))
+            ViewModel.Query = Query;
+
+        return base.OnInitializedAsync();
+
+    }
+}

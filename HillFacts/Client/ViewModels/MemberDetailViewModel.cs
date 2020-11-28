@@ -23,8 +23,8 @@ namespace HillFacts.Client.ViewModels
 
         public async Task GetMemberDetail()
         {
-            Member = await cacheService.CallCacheableServerMethod<Member>($"/api/Propublica/GetMemberDetail?id={MemberId}");
-            RecentSponsoredBills = await cacheService.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/Propublica/GetRecentBillsByMember?id={MemberId}"); ;
+            Member = await cacheService.CallCacheableServerMethod<Member>($"/api/PropublicaCongress/GetMemberDetail?id={MemberId}");
+            RecentSponsoredBills = await cacheService.CallCacheableServerMethod<RecentBillsByMemberContainer>($"/api/PropublicaCongress/GetRecentBillsByMember?id={MemberId}"); ;
         }
     }
 }

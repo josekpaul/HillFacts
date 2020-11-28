@@ -1,19 +1,32 @@
 ﻿@page "/"
-
+@using D3Visualizations.Services
+@using System.Text.Json
 <h1>Congress</h1>
 <p>House and Senate and Bills and Committees</p>
 <p>
     Information from <a target="_blank" href="https://www.propublica.org/datastore/api/propublica-congress-api">Propublica Congress API</a>.
     Proof of concept so far. Lot more work to do. -- <a href="mailto:jose.k.paul@gmail.com">jose.k.paul@gmail.com</a>
-    @*<button type="button" class="btn btn-info" @onclick="ShowToastrInfo">Show Toastr Info</button>*@
+    @*<div class="treemapContainer" @ref="Tree"></div>*@
+    @if (MapData != null)
+    {
+        <D3Visualizations.Components.Treemap Data="@MapData"></D3Visualizations.Components.Treemap>
+    }
 </p>
 <p>Project can be found <a href="https://github.com/josekpaul/HillFacts" target="_blank">Here</a></p>
-@*@code{
+@code{
+    ElementReference Tree;
     [Inject]
-    public HfTimeline.Services.ToastrService ToastrService { get; set; }
+    public D3Visualizations.Services.D3VisualizationsService Visualizations { get; set; }
+    public TreemapInput MapData { get; set; }
 
-    private async Task ShowToastrInfo()
+    protected override Task OnInitializedAsync()
     {
-        await ToastrService.ShowInfoMessage();
+        MapData = JsonSerializer.Deserialize<TreemapInput>(@"{ ""Children"": [{ ""Name"": ""boss1"", ""Children"": [{ ""Name"": ""mister_a"", ""Group"": ""A"", ""Value"": 28, ""ColName"": ""level3"" }, { ""Name"": ""mister_b"", ""Group"": ""A"", ""Value"": 19, ""ColName"": ""level3"" }, { ""Name"": ""mister_c"", ""Group"": ""C"", ""Value"": 18, ""ColName"": ""level3"" }, { ""Name"": ""mister_d"", ""Group"": ""C"", ""Value"": 19, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss2"", ""Children"": [{ ""Name"": ""mister_e"", ""Group"": ""C"", ""Value"": 14, ""ColName"": ""level3"" }, { ""Name"": ""mister_f"", ""Group"": ""A"", ""Value"": 11, ""ColName"": ""level3"" }, { ""Name"": ""mister_g"", ""Group"": ""B"", ""Value"": 15, ""ColName"": ""level3"" }, { ""Name"": ""mister_h"", ""Group"": ""B"", ""Value"": 16, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss3"", ""Children"": [{ ""Name"": ""mister_i"", ""Group"": ""B"", ""Value"": 10, ""ColName"": ""level3"" }, { ""Name"": ""mister_j"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_k"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_l"", ""Group"": ""D"", ""Value"": 25, ""ColName"": ""level3"" }, { ""Name"": ""mister_m"", ""Group"": ""D"", ""Value"": 16, ""ColName"": ""level3"" }, { ""Name"": ""mister_n"", ""Group"": ""D"", ""Value"": 28, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }], ""Name"": ""CEO"" }");
+        return base.OnInitializedAsync();
     }
-}*@
+
+    private async Task DrawTreemap()
+    {
+        await Visualizations.DrawTreemap(Tree);
+    }
+}

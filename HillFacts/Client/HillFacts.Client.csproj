@@ -14,8 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\HfTimeline\HfTimeline.csproj" />
+    <ProjectReference Include="..\..\HfTimeline\D3Visualizations.csproj" />
     <ProjectReference Include="..\..\JSEmbed\JSEmbed.csproj" />
+    <ProjectReference Include="..\..\Propublica.CampaignFinance.Api.Contracts\Propublica.CampaignFinance.Api.Contracts.csproj" />
     <ProjectReference Include="..\..\ProPublicaCongressAPI.Contracts\ProPublicaCongressAPI.Contracts.csproj" />
   </ItemGroup>
 
