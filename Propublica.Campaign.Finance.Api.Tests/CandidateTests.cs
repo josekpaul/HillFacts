@@ -9,7 +9,7 @@ namespace Propublica.CampaignFinance.Api.Tests
         [TestMethod]
         public void SearchCandidates()
         {
-            var client = new ApiClient("propublicaApiKey");
+            var client = new ApiClient("apikey");
             var candidates = client.SearchCandidates("2020", "Wilson").GetAwaiter().GetResult();
             Assert.IsNotNull(candidates);
         }

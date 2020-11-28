@@ -22,8 +22,10 @@
         </BSNav>
     </BSCollapse>
 </BSNavbar>
+@*Ghetto adjustment so nav menu does not open over content.*@
+<div style="min-height:120px;display:@(IsOpen? "inline-block":"none")"></div>
 @code {
-    bool IsOpen { get; set; } = true;
+    bool IsOpen { get; set; } = false;
     void onclick(MouseEventArgs e)
     {
         IsOpen = !IsOpen;
