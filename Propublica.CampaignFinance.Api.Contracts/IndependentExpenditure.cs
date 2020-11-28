@@ -8,25 +8,34 @@ using System.Threading.Tasks;
 namespace Propublica.CampaignFinance.Api.Contracts
 {
     // Root myDeserializedClass = JsonSerializer.Deserialize<Root>(myJsonResponse);
-    public class IndependentExpenditurePerCandidateResult
+    public class IndependentExpenditureResult
     {
         [JsonPropertyName("fec_committee")]
         public string FecCommittee { get; set; }
 
+        [JsonPropertyName("fec_committee_id")]
+        public string FecCommitteeId { get; set; }
+
         [JsonPropertyName("fec_committee_name")]
         public string FecCommitteeName { get; set; }
+
+        [JsonPropertyName("fec_candidate")]
+        public string FecCandidate { get; set; }
+
+        [JsonPropertyName("fec_candidate_id")]
+        public string FecCandidateId { get; set; }
 
         [JsonPropertyName("candidate_name")]
         public string CandidateName { get; set; }
 
         [JsonPropertyName("amount")]
-        public double? Amount { get; set; }
+        public string Amount { get; set; }
 
         [JsonPropertyName("office")]
         public string Office { get; set; }
 
         [JsonPropertyName("state")]
-        public object State { get; set; }
+        public string State { get; set; }
 
         [JsonPropertyName("district")]
         public object District { get; set; }
@@ -43,12 +52,6 @@ namespace Propublica.CampaignFinance.Api.Contracts
         [JsonPropertyName("date_received")]
         public string DateReceived { get; set; }
 
-        [JsonPropertyName("fec_uri")]
-        public object FecUri { get; set; }
-
-        [JsonPropertyName("amendment")]
-        public object Amendment { get; set; }
-
         [JsonPropertyName("support_or_oppose")]
         public string SupportOrOppose { get; set; }
 
@@ -62,16 +65,19 @@ namespace Propublica.CampaignFinance.Api.Contracts
         public int FilingId { get; set; }
 
         [JsonPropertyName("amended_from")]
-        public object AmendedFrom { get; set; }
+        public int? AmendedFrom { get; set; }
 
         [JsonPropertyName("dissemination_date")]
         public string DisseminationDate { get; set; }
 
         [JsonPropertyName("form_type")]
-        public string FormType { get; set; }
+        public object FormType { get; set; }
+
+        [JsonPropertyName("miscellaneous_text")]
+        public object MiscellaneousText { get; set; }
     }
 
-    public class IndependentExpenditurePerCandidateResponse
+    public class IndependentExpenditureResponse
     {
         [JsonPropertyName("status")]
         public string Status { get; set; }
@@ -85,21 +91,8 @@ namespace Propublica.CampaignFinance.Api.Contracts
         [JsonPropertyName("cycle")]
         public int Cycle { get; set; }
 
-        [JsonPropertyName("fec_candidate")]
-        public string FecCandidate { get; set; }
-
-        [JsonPropertyName("support_total")]
-        public double? SupportTotal { get; set; }
-
-        [JsonPropertyName("oppose_total")]
-        public double? OpposeTotal { get; set; }
-
-        [JsonPropertyName("offset")]
-        public object Offset { get; set; }
-
         [JsonPropertyName("results")]
-        public List<IndependentExpenditurePerCandidateResult> Results { get; set; }
+        public List<IndependentExpenditureResult> Results { get; set; }
     }
-
 
 }

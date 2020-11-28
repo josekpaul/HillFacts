@@ -1,0 +1,25 @@
+﻿@using D3Visualizations.Services
+
+<div @ref="TreemapElement"></div>
+
+@code {
+    [Inject]
+    public D3VisualizationsService Viz { get; set; }
+
+    TreemapInput data;
+    [Parameter]
+    public TreemapInput Data
+    {
+        get { return data; }
+        set
+        {
+            data = value;
+        }
+    }
+    ElementReference TreemapElement;
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        await Viz.DrawTreemap(Data, TreemapElement);
+    }
+}

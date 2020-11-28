@@ -23,8 +23,13 @@ namespace HillFacts.Server.Controllers
 
         public async Task<CandidateSearchResponse> SearchCandidate(string cycle, string query)
         {
-            var result = await _propublica.SearchCandidates(cycle, query);
-            return result;
+            var terms = query.Split(" ,".ToCharArray());
+            var response = await _propublica.SearchCandidates(cycle, query);
+            for (var i = terms.Length - 1; i > 0; i--)
+            {
+                response.Results = response.Results.Where(r => r.Candidate.Name.ToLower().Contains(terms[i - 1].ToLower())).ToList();
+            }
+            return response;
         }
 
         public async Task<CandidateResponse> GetCandidate(string cycle, string fecId)
@@ -33,9 +38,9 @@ namespace HillFacts.Server.Controllers
             return result;
         }
 
-        public async Task<IndependentExpenditurePerCandidateResponse> GetIndependentExpenditure(string cycle, string fecId)
+        public async Task<IndependentExpenditureResponse> GetIndependentExpenditure(string cycle)
         {
-            var result = await _propublica.GetindependentExpenditurePerCandidate(cycle, fecId);
+            var result = await _propublica.GetindependentExpenditureForPresidentialElection(cycle);
             return result;
         }
 

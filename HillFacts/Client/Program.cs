@@ -9,8 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using BlazorStrap;
 using Blazor.Analytics;
-using HfTimeline;
-using HfTimeline.Services;
+using D3Visualizations.Services;
 using JSEmbed.Services;
 using HillFacts.Client.Services;
 using HillFacts.Client.ViewModels;
@@ -28,6 +27,7 @@ namespace HillFacts.Client
             builder.Services.AddBootstrapCss();
             builder.Services.AddGoogleAnalytics("G-TN4Z59Z2QV");
             builder.Services.AddBlazorToastr();
+            builder.Services.AddD3Visualizations();
             builder.Services.AddJsEmbed();
             builder.Services.AddSingleton<IAppCacheService>(new AppCacheService(http));
 

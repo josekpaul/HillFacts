@@ -1,13 +1,66 @@
 ﻿@page "/CampFiCandidate/{Cycle}/{FecId}"
 @using System.ComponentModel
 @inject ICampFiCandidateViewModel ViewModel
-@if(ViewModel.Candidate == null)
+@if (ViewModel.Candidate == null)
 {
     <span>Loading.. </span>
 }
 else
 {
-    <h3>@ViewModel.Candidate.Results[0].DisplayName</h3>
+    <h3>
+        @ViewModel.Candidate.Results[0].DisplayName
+    </h3>
+    <h6>
+        @ViewModel.Candidate.Results[0].Party,
+        @ViewModel.Candidate.Results[0].District @ViewModel.Candidate.Results[0].State
+    </h6>
+    @if (ViewModel.ExpenditureTreemapped != null)
+    {
+        <D3Visualizations.Components.Treemap Data="@ViewModel.ExpenditureTreemapped"></D3Visualizations.Components.Treemap>
+    }
+    <div class="row">
+        <div class="col-md-6 m-2">
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <td>Total Contributions</td>
+                        <td class="text-right">
+                            $@ViewModel.Candidate.Results[0].TotalContributions<br />
+                            @(ViewModel.Candidate.Results[0].PercentUnitemized)% Unitemized
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total From Individuals</td>
+                        <td class="text-right">
+                            $@ViewModel.Candidate.Results[0].TotalFromIndividuals<br />
+                            Itemized: $@ViewModel.Candidate.Results[0].TotalFromIndividualsItemized<br />
+                            Unitemized: $@ViewModel.Candidate.Results[0].TotalFromIndividualsUnitemized<br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Total From PACs</td>
+                        <td class="text-right">$@ViewModel.Candidate.Results[0].TotalFromPacs</td>
+                    </tr>
+                    <tr>
+                        <td>Candidate Loans</td>
+                        <td class="text-right">$@ViewModel.Candidate.Results[0].CandidateLoans</td>
+                    </tr>
+                    <tr>
+                        <td>Total Disbursements</td>
+                        <td class="text-right">$@ViewModel.Candidate.Results[0].TotalDisbursements</td>
+                    </tr>
+                    <tr>
+                        <td>Total Receipts</td>
+                        <td class="text-right">$@ViewModel.Candidate.Results[0].TotalReceipts</td>
+                    </tr>
+                    <tr>
+                        <td>Total Refunds</td>
+                        <td class="text-right">$@ViewModel.Candidate.Results[0].TotalRefunds</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
 

@@ -34,7 +34,7 @@ namespace HillFacts.Client.ViewModels
         IAppCacheService cacheService;
         public CampFiSearchViewModel(IAppCacheService cacheService)
         {
-            this.cycle = "2020";
+            cycle = "2020";
             this.cacheService = cacheService;
         }
         public async Task GetSearchResults()
