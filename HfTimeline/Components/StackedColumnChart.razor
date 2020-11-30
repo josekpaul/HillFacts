@@ -1,0 +1,34 @@
+﻿@using D3Visualizations.Services
+@using System.Data
+
+<div @ref="StackedColumnChartElement"></div>
+
+@code {
+    [Inject]
+    public D3VisualizationsService Viz { get; set; }
+
+    string categoryColumn;
+    [Parameter]
+    public string CategoryColumn
+    {
+        get { return categoryColumn; }
+        set { categoryColumn = value; }
+    }
+
+    DataTable data;
+    [Parameter]
+    public DataTable Data
+    {
+        get
+        {
+            return data;
+        }
+        set { data = value; }
+    }
+    ElementReference StackedColumnChartElement;
+
+    protected async override void OnAfterRender(bool firstRender)
+    {
+        await Viz.DrawStackedColumnChart(Data, CategoryColumn, StackedColumnChartElement);
+    }
+}

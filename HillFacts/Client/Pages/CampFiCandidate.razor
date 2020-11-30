@@ -16,7 +16,10 @@ else
     </h6>
     @if (ViewModel.ExpenditureTreemapped != null)
     {
-        <D3Visualizations.Components.Treemap Data="@ViewModel.ExpenditureTreemapped"></D3Visualizations.Components.Treemap>
+        for (var i = 0; i < ViewModel.ExpenditureTreemapped.Children.Count; i++)
+        {
+            <D3Visualizations.Components.Treemap Data="@ViewModel.ExpenditureTreemapped.Children[i]"></D3Visualizations.Components.Treemap>
+        }
     }
     <div class="row">
         <div class="col-md-6 m-2">
