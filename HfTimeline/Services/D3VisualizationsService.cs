@@ -3,6 +3,9 @@ using System.Threading.Tasks;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
+using System.Data;
+using System.Text;
+using System;
 
 namespace D3Visualizations.Services
 {
@@ -13,28 +16,64 @@ namespace D3Visualizations.Services
         {
             _jsRuntime = jSRuntime;
         }
-        public async Task DrawTreemap()
-        {
-            var d = JsonSerializer.Deserialize<TreemapInput>(@"{ ""Children"": [{ ""Name"": ""boss1"", ""Children"": [{ ""Name"": ""mister_a"", ""Group"": ""A"", ""Value"": 28, ""ColName"": ""level3"" }, { ""Name"": ""mister_b"", ""Group"": ""A"", ""Value"": 19, ""ColName"": ""level3"" }, { ""Name"": ""mister_c"", ""Group"": ""C"", ""Value"": 18, ""ColName"": ""level3"" }, { ""Name"": ""mister_d"", ""Group"": ""C"", ""Value"": 19, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss2"", ""Children"": [{ ""Name"": ""mister_e"", ""Group"": ""C"", ""Value"": 14, ""ColName"": ""level3"" }, { ""Name"": ""mister_f"", ""Group"": ""A"", ""Value"": 11, ""ColName"": ""level3"" }, { ""Name"": ""mister_g"", ""Group"": ""B"", ""Value"": 15, ""ColName"": ""level3"" }, { ""Name"": ""mister_h"", ""Group"": ""B"", ""Value"": 16, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss3"", ""Children"": [{ ""Name"": ""mister_i"", ""Group"": ""B"", ""Value"": 10, ""ColName"": ""level3"" }, { ""Name"": ""mister_j"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_k"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_l"", ""Group"": ""D"", ""Value"": 25, ""ColName"": ""level3"" }, { ""Name"": ""mister_m"", ""Group"": ""D"", ""Value"": 16, ""ColName"": ""level3"" }, { ""Name"": ""mister_n"", ""Group"": ""D"", ""Value"": 28, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }], ""Name"": ""CEO"" }");
-            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawTreemap", d);
-        }
-        public async Task DrawTreemap(ElementReference element)
-        {
-            var d = JsonSerializer.Deserialize<TreemapInput>(@"{ ""Children"": [{ ""Name"": ""boss1"", ""Children"": [{ ""Name"": ""mister_a"", ""Group"": ""A"", ""Value"": 28, ""ColName"": ""level3"" }, { ""Name"": ""mister_b"", ""Group"": ""A"", ""Value"": 19, ""ColName"": ""level3"" }, { ""Name"": ""mister_c"", ""Group"": ""C"", ""Value"": 18, ""ColName"": ""level3"" }, { ""Name"": ""mister_d"", ""Group"": ""C"", ""Value"": 19, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss2"", ""Children"": [{ ""Name"": ""mister_e"", ""Group"": ""C"", ""Value"": 14, ""ColName"": ""level3"" }, { ""Name"": ""mister_f"", ""Group"": ""A"", ""Value"": 11, ""ColName"": ""level3"" }, { ""Name"": ""mister_g"", ""Group"": ""B"", ""Value"": 15, ""ColName"": ""level3"" }, { ""Name"": ""mister_h"", ""Group"": ""B"", ""Value"": 16, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }, { ""Name"": ""boss3"", ""Children"": [{ ""Name"": ""mister_i"", ""Group"": ""B"", ""Value"": 10, ""ColName"": ""level3"" }, { ""Name"": ""mister_j"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_k"", ""Group"": ""A"", ""Value"": 13, ""ColName"": ""level3"" }, { ""Name"": ""mister_l"", ""Group"": ""D"", ""Value"": 25, ""ColName"": ""level3"" }, { ""Name"": ""mister_m"", ""Group"": ""D"", ""Value"": 16, ""ColName"": ""level3"" }, { ""Name"": ""mister_n"", ""Group"": ""D"", ""Value"": 28, ""ColName"": ""level3"" }], ""ColName"": ""level2"" }], ""Name"": ""CEO"" }");
-            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawTreemap", d, element);
-        }
+
         public async Task DrawTreemap(TreemapInput d, ElementReference element)
         {
             await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawTreemap", d, element);
         }
+
+        public async Task DrawStackedColumnChart(DataTable d, string categoryColumn, ElementReference element)
+        {
+            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), categoryColumn, element);
+        }
+
+        static string ToCsv(DataTable dtDataTable)
+        {
+            StringBuilder sb = new StringBuilder();
+            //headers    
+            for (int i = 0; i < dtDataTable.Columns.Count; i++)
+            {
+                sb.Append(dtDataTable.Columns[i]);
+                if (i < dtDataTable.Columns.Count - 1)
+                {
+                    sb.Append(',');
+                }
+            }
+            sb.Append("\n");
+            foreach (DataRow dr in dtDataTable.Rows)
+            {
+                for (int i = 0; i < dtDataTable.Columns.Count; i++)
+                {
+                    if (!Convert.IsDBNull(dr[i]))
+                    {
+                        string value = dr[i].ToString();
+                        if (value.Contains(','))
+                        {
+                            value = String.Format("\"{0}\"", value);
+                            sb.Append(value);
+                        }
+                        else
+                        {
+                            sb.Append(dr[i].ToString());
+                        }
+                    }
+                    if (i < dtDataTable.Columns.Count - 1)
+                    {
+                        sb.Append(",");
+                    }
+                }
+                sb.Append("\n");
+            }
+            return sb.ToString();
+        }
+
     }
 
     public class TreemapInput
     {
         public string Name { get; set; }
         public List<TreemapInput> Children { get; set; }
-        public int? Value { get; set; }
-        public string Group { get; set; }
-        public string ColName { get; set; }
+        public double? Value { get; set; }
     }
+
 }
