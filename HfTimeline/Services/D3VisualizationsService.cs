@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
