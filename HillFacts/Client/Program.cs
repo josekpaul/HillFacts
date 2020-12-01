@@ -26,7 +26,6 @@ namespace HillFacts.Client
             builder.Services.AddScoped(sp => http);
             builder.Services.AddBootstrapCss();
             builder.Services.AddGoogleAnalytics("G-TN4Z59Z2QV");
-            builder.Services.AddBlazorToastr();
             builder.Services.AddD3Visualizations();
             builder.Services.AddJsEmbed();
             builder.Services.AddSingleton<IAppCacheService>(new AppCacheService(http));
@@ -35,6 +34,7 @@ namespace HillFacts.Client
             builder.Services.AddScoped<IMemberDetailViewModel, MemberDetailViewModel>();
             builder.Services.AddScoped<ICampFiSearchViewModel, CampFiSearchViewModel>();
             builder.Services.AddScoped<ICampFiCandidateViewModel, CampFiCandidateViewModel>();
+            builder.Services.AddScoped<IGeorgiaRunoffViewModel, GeorgiaRunoffViewModel>();
             await builder.Build().RunAsync();
         }
     }

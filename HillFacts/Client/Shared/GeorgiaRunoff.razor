@@ -1,0 +1,85 @@
+﻿@using System.ComponentModel
+@inject IGeorgiaRunoffViewModel ViewModel
+<h3 class="mb-1">Georgia Runoff Election Factsheet</h3>
+
+<BSTabGroup>
+    <BSTabList>
+        <BSTab>
+            <BSTabLabel>Charts</BSTabLabel>
+            <BSTabContent>
+                @if (ViewModel.CandidatesInfoTable == null)
+                {
+                    <span>Loading..</span>
+                }
+                else
+                {
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <h6 class="mb-1">Campaign Contributions (in millions of dollars)</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@ViewModel.CandidatesInfoTable"></D3Visualizations.Components.StackedColumnChart>
+                        </div>
+                    </div>
+                }
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
+            <BSTabLabel>Numbers</BSTabLabel>
+            <BSTabContent>
+                @if (ViewModel.CandidatesInfo == null)
+                {
+                    <span>Loading..</span>
+                }
+                else
+                {
+                    <div class="row mt-1">
+                        @foreach (var cInfo in ViewModel.CandidatesInfo)
+                        {
+                            <div class="col-md-3 p-1">
+                                @cInfo.Results[0].Name
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            <tr>
+                                                <td>Debts Owed</td>
+                                                <td>@cInfo.Results[0].CandidateLoans</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Contirbutions</td>
+                                                <td>@cInfo.Results[0].TotalContributions</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </BSTabContent>
+        </BSTab>
+    </BSTabList>
+    <BSTabSelectedContent />
+</BSTabGroup>
+
+@code {
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.GetInfo();
+        return base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+
+}
