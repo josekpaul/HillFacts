@@ -1,4 +1,4 @@
-﻿using Microsoft.JSInterop;
+using Microsoft.JSInterop;
 using System.Threading.Tasks;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
@@ -26,6 +26,12 @@ namespace D3Visualizations.Services
         {
             await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), categoryColumn, element);
         }
+
+        public async Task DrawStackedColumnChart(DataTable d, ElementReference element)
+        {
+            await DrawStackedColumnChart(d, d.Columns[0].ColumnName, element);
+        }
+
 
         static string ToCsv(DataTable dtDataTable)
         {

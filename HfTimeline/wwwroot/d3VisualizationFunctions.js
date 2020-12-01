@@ -1,4 +1,4 @@
-﻿window.d3VisualizationFunctions = {
+window.d3VisualizationFunctions = {
 	drawTreemap: function (data, elem) {
 		var stringToColour = function (str) {
 			var hash = 0;
@@ -13,7 +13,7 @@
 			return colour;
 		}
 
-		d3Selection = d3.select(elem);
+		d3Selection = d3.select(elem).html("");
 		var w = d3Selection.node().getBoundingClientRect().width;
 		var margin = { top: 10, right: 10, bottom: 10, left: 10 },
 			width = w,
@@ -112,19 +112,31 @@
 
 	drawStackedColumnChart: function (dataTable, categoryColumn, elem) {
 
-		d3Selection = d3.select(elem);
-		var w = 440;// d3Selection.node().getBoundingClientRect().width;
+		const d3Selection = d3.select(elem).html("");
+		d3Selection.selectAll("*").remove();
+		const w = d3Selection.node().getBoundingClientRect().width;
 
 		// set the dimensions and margins of the graph
-		var margin = { top: 10, right: 30, bottom: 20, left: 50 },
+		const margin = { top: 10, right: 30, bottom: 20, left: 50 },
 			width = w - margin.left - margin.right,
 			height = Math.ceil(w / 1.64) - margin.top - margin.bottom;
 
 		// append the svg object to the body of the page
 
-		var data = d3.csvParse(dataTable, d3.autoType);
+		const data = d3.csvParse(dataTable, d3.autoType);
 
-		var series = d3.stack().keys(data.columns.slice(1))(data);
+		const series = d3.stack().keys(data.columns.slice(1))(data);
+
+		const Tooltip = d3Selection
+			.append("div")
+			.style("opacity", 0)
+			.style("position","absolute")
+			.attr("class", "tooltip")
+			.style("background-color", "white")
+			.style("border", "solid")
+			.style("border-width", "2px")
+			.style("border-radius", "5px")
+			.style("padding", "5px");
 
 		const svg = d3Selection
 			.append("svg")
@@ -147,15 +159,38 @@
 
 		const rects = gSvg.selectAll("g").data(series).enter()
 			.append("g")
-			.attr("fill", d => color(d.key)); //Color is assigned here because you want everyone for the series to be the same color
-
+			.attr("fill", function (d) {
+				return color(d.key);
+			});
 		rects.selectAll("rect")
-			.data(d => d)
+			.data(function (d) {
+				return d;
+			})
 			.join("rect")
 			.attr("x", (d, i) => xScale(d.data[categoryColumn]))
 			.attr("y", d => yScale(d[1]))
 			.attr("height", d => yScale(d[0]) - yScale(d[1]))
 			.attr("width", xScale.bandwidth())
+			.style("opacity", 0.8)
+			.style("stroke", "grey")
+			.on("mouseover", function (event, d) {
+				Tooltip
+					.style("opacity", 1)
+				d3.select(this)
+					.style("opacity", 1);
+			})
+			.on("mousemove", function (event, d) {
+				Tooltip
+					.html((d[1] - d[0]) + " " + d3.select(this.parentNode).datum().key)
+					.style("left", (event.pageX + "px"))
+					.style("top", ((event.pageY + 5) + "px"));
+			})
+			.on("mouseleave", function (event, d) {
+				Tooltip
+					.style("opacity", 0)
+				d3.select(this)
+					.style("opacity", 0.8);
+			})
     /*.on("mouseover", function(){d3.select(this).attr("fill", "purple")})
     .on("mouseout", function(){d3.select(this).attr("fill", color(series.key))})*/;
 

@@ -26,7 +26,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53362DE9-9C72-4FAF-BC5C-807F6AC77CC2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propublica.CampaignFinance.Api.Tests", "Propublica.Campaign.Finance.Api.Tests\Propublica.CampaignFinance.Api.Tests.csproj", "{8C306103-8721-4337-9C6E-B43F4AA2B6DF}"
-
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
