@@ -5,7 +5,7 @@ using System.Data;
 
 namespace HillFacts.Client.ViewModels
 {
-    public interface IGeorgiaRunoffViewModel
+    public interface ICampaignComparisonViewModel
     {
         event PropertyChangedEventHandler PropertyChanged;
 

@@ -6,7 +6,7 @@ using Propublica.CampaignFinance.Api.Contracts;
 
 namespace HillFacts.Client.ViewModels
 {
-    public class GeorgiaRunoffViewModel : BaseViewModel, IGeorgiaRunoffViewModel
+    public class CampaignComparisonViewModel : BaseViewModel, ICampaignComparisonViewModel
     {
         Dictionary<string, string> candidates;
         public Dictionary<string, string> Candidates
@@ -32,14 +32,9 @@ namespace HillFacts.Client.ViewModels
 
 
         IAppCacheService appCacheService;
-        public GeorgiaRunoffViewModel(IAppCacheService appCacheService)
+        public CampaignComparisonViewModel(IAppCacheService appCacheService)
         {
             this.appCacheService = appCacheService;
-            candidates = new Dictionary<string, string>();
-            candidates.Add("S4GA11285", "David Perdue");
-            candidates.Add("S8GA00180", "Jon Ossoff");
-            candidates.Add("S0GA00526", "Kelly Loeffler");
-            candidates.Add("S0GA00559", "Warnock");
         }
 
         public async void GetInfo()

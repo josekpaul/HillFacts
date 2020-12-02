@@ -9,6 +9,9 @@
     Information from <a target="_blank" href="https://www.propublica.org/datastore/api/propublica-congress-api">Propublica Congress API</a>.
     Proof of concept so far. Lot more work to do. -- <a href="mailto:jose.k.paul@gmail.com">jose.k.paul@gmail.com</a>
 </p>
+<p>
+    <b><a href="/GeorgiaRace">Georgia Senate Runoff Factsheet</a></b>
+</p>
 @if (BarChartData != null)
 {
 
@@ -17,9 +20,9 @@
             <StackedColumnChart Data="@BarChartData"></StackedColumnChart>
         </div>
     </div>*@
-    <div style="width:300px">
+    @*<div style="width:300px">
         <StackedColumnChart Data="@BarChartData"></StackedColumnChart>
-    </div>
+    </div>*@
 }
 <p>Project can be found <a href="https://github.com/josekpaul/HillFacts" target="_blank">Here</a></p>
 @code{
