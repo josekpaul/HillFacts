@@ -1,4 +1,4 @@
-﻿window.d3VisualizationFunctions = {
+window.d3VisualizationFunctions = {
 	drawTreemap: function (data, elem) {
 		var stringToColour = function (str) {
 			var hash = 0;
