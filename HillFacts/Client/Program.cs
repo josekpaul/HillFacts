@@ -34,7 +34,7 @@ namespace HillFacts.Client
             builder.Services.AddScoped<IMemberDetailViewModel, MemberDetailViewModel>();
             builder.Services.AddScoped<ICampFiSearchViewModel, CampFiSearchViewModel>();
             builder.Services.AddScoped<ICampFiCandidateViewModel, CampFiCandidateViewModel>();
-            builder.Services.AddScoped<IGeorgiaRunoffViewModel, GeorgiaRunoffViewModel>();
+            builder.Services.AddScoped<ICampaignComparisonViewModel, CampaignComparisonViewModel>();
             await builder.Build().RunAsync();
         }
     }

@@ -1,0 +1,144 @@
+﻿@using System.ComponentModel
+@inject ICampaignComparisonViewModel ViewModel
+<BSTabGroup>
+    <BSTabList>
+        <BSTab>
+            <BSTabLabel>Numbers</BSTabLabel>
+            <BSTabContent>
+                @if (ViewModel.CandidatesInfo == null)
+                {
+                    <span>Loading..</span>
+                }
+                else
+                {
+                    <div class="row mt-1">
+                        @foreach (var cInfo in ViewModel.CandidatesInfo)
+                        {
+                            <div class="col-md-3 p-1">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">
+                                                    @cInfo.Results[0].Name
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>Beginning Cash</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].BeginCash)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Contirbutions</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalContributions)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Disbursements</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalDisbursements)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total Refunds</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalRefunds)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Individual Contributions (Itemized)</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromIndividualsItemized)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Individual Contributions (Unitemized)</td>
+                                                <td class="text-right">
+                                                    @FormatNumber(cInfo.Results[0].TotalFromIndividualsUnitemized)
+                                                    (@(cInfo.Results[0].PercentUnitemized)%)
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Total from PACs</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromPacs)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Coordinated Expenditures</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].CoordinatedExpenditures)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Independent Expenditures</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].IndependentExpenditures)</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Debts Owed</td>
+                                                <td class="text-right">@FormatNumber(cInfo.Results[0].CandidateLoans)</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
+            <BSTabLabel>Charts</BSTabLabel>
+            <BSTabContent>
+                @if (ViewModel.CandidatesInfoTable == null)
+                {
+                    <span>Loading..</span>
+                }
+                else
+                {
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <h6 class="mb-1">Campaign Contributions (in millions of dollars)</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@ViewModel.CandidatesInfoTable"></D3Visualizations.Components.StackedColumnChart>
+                        </div>
+                    </div>
+                }
+            </BSTabContent>
+        </BSTab>
+    </BSTabList>
+    <BSTabSelectedContent />
+</BSTabGroup>
+
+@code {
+    [Parameter]
+    public Dictionary<string, string> Candidates { get; set; }
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    protected override Task OnInitializedAsync()
+    {
+        ViewModel.Candidates = Candidates;
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.GetInfo();
+        return base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+    private static string FormatNumber(double num)
+    {
+        // Ensure number has max 3 significant digits (no rounding up can happen)
+        long i = (long)Math.Pow(10, (int)Math.Max(0, Math.Log10(num) - 2));
+        num = num / i * i;
+
+        if (num >= 1000000000)
+            return (num / 1000000000D).ToString("0.##") + "B";
+        if (num >= 1000000)
+            return (num / 1000000D).ToString("0.##") + "M";
+        if (num >= 1000)
+            return (num / 1000D).ToString("0.##") + "K";
+
+        return num.ToString("#,0");
+    }
+
+
+}
