@@ -1,0 +1,23 @@
+﻿@using JSEmbed.Services
+
+@if (!string.IsNullOrWhiteSpace(TwitterAccount))
+{
+    <a class="twitter-timeline" href="https://twitter.com/@(TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(TwitterAccount)</a>
+}
+
+@code {
+    [Inject]
+    JSEmbedService JsEmbedSvc { get; set; }
+
+    [Parameter]
+    public string TwitterAccount { get; set; }
+
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!string.IsNullOrWhiteSpace(TwitterAccount))
+        {
+            await JsEmbedSvc.InitTwitterFeed();
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

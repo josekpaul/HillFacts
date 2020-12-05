@@ -8,12 +8,12 @@
     <hr />
 }
 <div class="row">
-    <div class="col-md-3 scrollcontainer-h-900">
-        @if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
-        {
-            <a class="twitter-timeline" href="https://twitter.com/@(ViewModel.Member.TwitterAccount)?ref_src=twsrc%5Etfw">Tweets by @(ViewModel.Member.TwitterAccount)</a>
-        }
-    </div>
+    @if (ViewModel.Member != null)
+    {
+        <div class="col-md-3 scrollcontainer-h-900">
+            <JSEmbed.Components.TwitterFeed TwitterAccount="@(ViewModel.Member.TwitterAccount)"></JSEmbed.Components.TwitterFeed>
+        </div>
+    }
     <div class="col-md-9">
         @if (ViewModel.Member != null)
         {
@@ -48,7 +48,7 @@
 
             foreach (var subjectGroup in sponsoredBillGroups)
             {
-                <span class="badge badge-info">@subjectGroup.Key: @subjectGroup.Count()</span>
+                <span class="badge badge-info mr-2">@subjectGroup.Key: @subjectGroup.Count()</span>
             }
 
             foreach (var g in ViewModel.RecentSponsoredBills.Bills)
@@ -78,11 +78,6 @@
         ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
         ViewModel.MemberId = Id;
         await ViewModel.GetMemberDetail();
-
-        if (!string.IsNullOrWhiteSpace(ViewModel.Member?.TwitterAccount))
-        {
-            await JSEmbedService.RunRemoteJS("https://platform.twitter.com/widgets.js");
-        }
     }
 
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
