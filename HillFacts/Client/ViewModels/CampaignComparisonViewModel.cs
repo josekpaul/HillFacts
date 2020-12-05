@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using HillFacts.Client.Services;
 using Propublica.CampaignFinance.Api.Contracts;
 
@@ -37,7 +38,7 @@ namespace HillFacts.Client.ViewModels
             this.appCacheService = appCacheService;
         }
 
-        public async void GetInfo()
+        public async Task GetInfo()
         {
             candidatesInfo = new List<CandidateResponse>();
             foreach (var candidate in candidates)

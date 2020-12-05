@@ -9,7 +9,7 @@
 }
 else
 {
-    <input @bind="ViewModel.Filter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control" />
+    <input @bind="ViewModel.Filter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control mb-2" />
     <div class="table-responsive">
 
         <table class="table table-striped">
@@ -132,7 +132,7 @@ else
                             <td>
                                 @if (!string.IsNullOrEmpty(member.District))
                                 {
-                                    <a target="_blank" href="https://www.govtrack.us/congress/members/@(member.State)#map">District @member.District</a>
+                                    <a class="mr-2" target="_blank" href="https://www.govtrack.us/congress/members/@(member.State)#map">District @member.District</a>
                                 }
                                 @member.State
                             </td>

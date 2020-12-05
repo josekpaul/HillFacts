@@ -17,5 +17,10 @@ namespace JSEmbed.Services
         {
             await _jsRuntime.InvokeVoidAsync("jsEmbed.runRemoteJs", sourceUrl, onLoadHandler);
         }
+
+        public async Task InitTwitterFeed()
+        {
+            await RunRemoteJS("https://platform.twitter.com/widgets.js");
+        }
     }
 }

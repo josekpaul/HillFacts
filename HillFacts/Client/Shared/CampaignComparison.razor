@@ -3,6 +3,22 @@
 <BSTabGroup>
     <BSTabList>
         <BSTab>
+            <BSTabLabel>Twitter</BSTabLabel>
+            <BSTabContent>
+                <div class="row">
+                    @if (ViewModel.CandidatesInfo != null)
+                    {
+                        @foreach (var c in ViewModel.CandidatesInfo)
+                        {
+                            <div class="col-md-3">
+                                <JSEmbed.Components.TwitterFeed TwitterAccount="@c.Results[0].TwitterUser"></JSEmbed.Components.TwitterFeed>
+                            </div>
+                        }
+                    }
+                </div>
+            </BSTabContent>
+        </BSTab>
+        <BSTab>
             <BSTabLabel>Numbers</BSTabLabel>
             <BSTabContent>
                 @if (ViewModel.CandidatesInfo == null)
@@ -11,69 +27,127 @@
                 }
                 else
                 {
-                    <div class="row mt-1">
-                        @foreach (var cInfo in ViewModel.CandidatesInfo)
-                        {
-                            <div class="col-md-3 p-1">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th colspan="2">
-                                                    @cInfo.Results[0].Name
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>Beginning Cash</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].BeginCash)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Contirbutions</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalContributions)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Disbursements</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalDisbursements)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total Refunds</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalRefunds)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Individual Contributions (Itemized)</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromIndividualsItemized)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Individual Contributions (Unitemized)</td>
-                                                <td class="text-right">
-                                                    @FormatNumber(cInfo.Results[0].TotalFromIndividualsUnitemized)
-                                                    (@(cInfo.Results[0].PercentUnitemized)%)
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Total from PACs</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromPacs)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Coordinated Expenditures</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].CoordinatedExpenditures)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Independent Expenditures</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].IndependentExpenditures)</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Debts Owed</td>
-                                                <td class="text-right">@FormatNumber(cInfo.Results[0].CandidateLoans)</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        }
-                    </div>
+                    <table class="table table-striped table-responsive mt-1">
+                        <thead class="thead-light">
+                            <tr>
+                                <th></th>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <th>@cInfo.Results[0].Name</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Beginning Cash</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].BeginCash)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Contributions</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalContributions)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Disbursements</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalDisbursements)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Refunds</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalRefunds)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Individual Contributions (Itemized)</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromIndividualsItemized)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Individual Contributions (Unitemized)</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">
+                                        @FormatNumber(cInfo.Results[0].TotalFromIndividualsUnitemized)
+                                        (@(cInfo.Results[0].PercentUnitemized)%)
+                                    </td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total from PACs</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalFromPacs)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Coordinated Expenditures</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].CoordinatedExpenditures)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Independent Expenditures</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].IndependentExpenditures)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Disbursements</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalDisbursements)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Receipts</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalReceipts)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Total Refunds</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].TotalRefunds)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Candidate Loans</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].CandidateLoans)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>Debts Owed</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].DebtsOwed)</td>
+                                }
+                            </tr>
+                            <tr>
+                                <td>End Cash</td>
+                                @foreach (var cInfo in ViewModel.CandidatesInfo)
+                                {
+                                    <td class="text-right">@FormatNumber(cInfo.Results[0].EndCash)</td>
+                                }
+                            </tr>
+                        </tbody>
+                    </table>
                 }
             </BSTabContent>
         </BSTab>
@@ -102,6 +176,8 @@
 @code {
     [Parameter]
     public Dictionary<string, string> Candidates { get; set; }
+    [Inject]
+    public JSEmbed.Services.JSEmbedService JSEmbedService { get; set; }
 
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
     {
@@ -111,12 +187,11 @@
         });
     }
 
-    protected override Task OnInitializedAsync()
+    protected async override Task OnInitializedAsync()
     {
         ViewModel.Candidates = Candidates;
         ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
-        ViewModel.GetInfo();
-        return base.OnInitializedAsync();
+        await ViewModel.GetInfo();
     }
 
     public void Dispose()

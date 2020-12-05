@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Threading.Tasks;
 
 namespace HillFacts.Client.ViewModels
 {
@@ -13,6 +14,6 @@ namespace HillFacts.Client.ViewModels
         List<CandidateResponse> CandidatesInfo { get; set; }
         DataTable CandidatesInfoTable { get; set; }
 
-        void GetInfo();
+        Task GetInfo();
     }
 }

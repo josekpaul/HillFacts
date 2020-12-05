@@ -7,7 +7,16 @@ namespace HillFacts.Client.ViewModels
     public class MemberDetailViewModel : BaseViewModel, IMemberDetailViewModel
     {
         string memberId;
-        public string MemberId { get { return memberId; } set { SetValue<string>(ref memberId, value); } }
+        public string MemberId
+        {
+            get { return memberId; }
+            set
+            {
+                Member = null;
+                recentSponsoredBills = null;
+                SetValue<string>(ref memberId, value);
+            }
+        }
         Member member;
         public Member Member { get { return member; } set { SetValue<Member>(ref member, value); } }
         RecentBillsByMemberContainer recentSponsoredBills;
