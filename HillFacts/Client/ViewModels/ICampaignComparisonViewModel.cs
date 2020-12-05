@@ -1,4 +1,4 @@
-﻿using Propublica.CampaignFinance.Api.Contracts;
+using Propublica.CampaignFinance.Api.Contracts;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
