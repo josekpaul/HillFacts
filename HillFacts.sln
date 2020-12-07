@@ -27,6 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53362DE9
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Propublica.CampaignFinance.Api.Tests", "Propublica.Campaign.Finance.Api.Tests\Propublica.CampaignFinance.Api.Tests.csproj", "{8C306103-8721-4337-9C6E-B43F4AA2B6DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BSIcons", "BSIcons\BSIcons.csproj", "{10B785AF-D487-4E2F-A82F-D816F315E104}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{8C306103-8721-4337-9C6E-B43F4AA2B6DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C306103-8721-4337-9C6E-B43F4AA2B6DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C306103-8721-4337-9C6E-B43F4AA2B6DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B785AF-D487-4E2F-A82F-D816F315E104}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B785AF-D487-4E2F-A82F-D816F315E104}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B785AF-D487-4E2F-A82F-D816F315E104}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B785AF-D487-4E2F-A82F-D816F315E104}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{EF992FC3-A8AE-4906-A622-1D863030E423} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
 		{AB2197FA-2A75-4F99-93A9-38867D3C92BD} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
 		{8C306103-8721-4337-9C6E-B43F4AA2B6DF} = {53362DE9-9C72-4FAF-BC5C-807F6AC77CC2}
+		{10B785AF-D487-4E2F-A82F-D816F315E104} = {11AE5151-B9A6-43A6-9522-F3FE70F61F22}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {56688305-3ECD-4D9B-9796-90C2AE2A6C1B}
