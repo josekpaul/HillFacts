@@ -110,7 +110,7 @@ window.d3VisualizationFunctions = {
 			.attr("fill", "grey")
 	},
 
-	drawStackedColumnChart: function (dataTable, categoryColumn, elem) {
+	drawStackedColumnChart: function (dataTable, categoryColumn, elem, dotnetRef, callbackFn) {
 
 		const d3Selection = d3.select(elem).html("");
 		d3Selection.selectAll("*").remove();
@@ -190,7 +190,10 @@ window.d3VisualizationFunctions = {
 					.style("opacity", 0)
 				d3.select(this)
 					.style("opacity", 0.8);
-			})
+			}).
+			on("click", function (event, d) {
+				dotnetRef.invokeMethodAsync(callbackFn, d[categoryColumn] + "|" + d3.select(this.parentNode).datum().key);
+			});
     /*.on("mouseover", function(){d3.select(this).attr("fill", "purple")})
     .on("mouseout", function(){d3.select(this).attr("fill", color(series.key))})*/;
 

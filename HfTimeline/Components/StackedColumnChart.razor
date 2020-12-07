@@ -1,12 +1,14 @@
 @using D3Visualizations.Services
 @using System.Data
+@using Microsoft.JSInterop
 
 <div @ref="StackedColumnChartElement"></div>
 
 @code {
     [Inject]
     public D3VisualizationsService Viz { get; set; }
-
+    [Inject]
+    public IJSRuntime JS { get; set; }
     DataTable data;
     [Parameter]
     public DataTable Data
@@ -17,10 +19,19 @@
         }
         set { data = value; }
     }
+
     ElementReference StackedColumnChartElement;
+
+    public EventCallback<string> OnClick { get; set; }
 
     protected async override void OnAfterRender(bool firstRender)
     {
-        await Viz.DrawStackedColumnChart(Data, StackedColumnChartElement);
+        await Viz.DrawStackedColumnChart(Data, StackedColumnChartElement, DotNetObjectReference.Create(this), "UserClicked");
+    }
+
+    [JSInvokable]
+    void UserClicked(string msg)
+    {
+        OnClick.InvokeAsync(msg);
     }
 }
