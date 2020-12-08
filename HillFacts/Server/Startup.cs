@@ -48,7 +48,10 @@ namespace HillFacts.Server
 
             app.UseHttpsRedirection();
             app.UseBlazorFrameworkFiles();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                OnPrepareResponse = context => { context.Context.Response.Headers["Cache-Control"] = "no-cache"; }
+            });
 
             app.UseRouting();
 

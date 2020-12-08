@@ -1,6 +1,5 @@
 using Microsoft.JSInterop;
 using System.Threading.Tasks;
-using System.Text.Json;
 using Microsoft.AspNetCore.Components;
 using System.Collections.Generic;
 using System.Data;
@@ -22,14 +21,10 @@ namespace D3Visualizations.Services
             await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawTreemap", d, element);
         }
 
-        public async Task DrawStackedColumnChart(DataTable d, string categoryColumn, ElementReference element)
+        public async Task DrawStackedColumnChart(DataTable d, ElementReference element, object dotnetObject, string callbackFunction)
         {
-            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), categoryColumn, element);
-        }
-
-        public async Task DrawStackedColumnChart(DataTable d, ElementReference element)
-        {
-            await DrawStackedColumnChart(d, d.Columns[0].ColumnName, element);
+            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), d.Columns[0].ColumnName,
+                element, dotnetObject, callbackFunction);
         }
 
 
