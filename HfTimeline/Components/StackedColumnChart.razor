@@ -7,31 +7,23 @@
 @code {
     [Inject]
     public D3VisualizationsService Viz { get; set; }
-    [Inject]
-    public IJSRuntime JS { get; set; }
-    DataTable data;
+
     [Parameter]
-    public DataTable Data
-    {
-        get
-        {
-            return data;
-        }
-        set { data = value; }
-    }
+    public DataTable Data { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnClick { get; set; }
 
     ElementReference StackedColumnChartElement;
 
-    public EventCallback<string> OnClick { get; set; }
-
     protected async override void OnAfterRender(bool firstRender)
     {
-        await Viz.DrawStackedColumnChart(Data, StackedColumnChartElement, DotNetObjectReference.Create(this), "UserClicked");
+        await Viz.DrawStackedColumnChart(Data, StackedColumnChartElement, DotNetObjectReference.Create(this), "ChartClicked");
     }
 
     [JSInvokable]
-    void UserClicked(string msg)
+    public async void ChartClicked(string response)
     {
-        OnClick.InvokeAsync(msg);
+        await OnClick.InvokeAsync(response);
     }
 }

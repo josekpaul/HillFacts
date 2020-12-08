@@ -1,4 +1,5 @@
 ﻿@using System.ComponentModel
+@using System.Data
 @inject IMembersViewModel ViewModel
 
 <h1>@CurrentChamber Members</h1>
@@ -10,150 +11,201 @@
 else
 {
     <input @bind="ViewModel.Filter" placeholder="press enter after filter-text. If 2 characters, filters for state. Else, for name" class="form-control mb-2" />
-    <div class="table-responsive">
+    <BSTabGroup>
+        <BSTabList>
+            <BSTab>
+                <BSTabLabel>Table</BSTabLabel>
+                <BSTabContent>
+                    <div class="table-responsive mt-1">
+                        <table class="table table-striped">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th></th>
+                                    <th class="align-bottom text-center">
+                                        State<br />
+                                        <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                        </svg>
+                                        <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                        </svg>
+                                    </th>
+                                    @if (CurrentChamber == Chamber.Senate)
+                                    {
+                                        <th>
+                                            Next Election
+                                            <br />
+                                            <div style="width:40px">
+                                                <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                                </svg>
+                                                <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                                </svg>
+                                            </div>
+                                        </th>
+                                    }
+                                    <th>
+                                        Age
+                                        <br />
+                                        <div style="width:40px">
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                            </svg>
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        Seniority
+                                        <br /><div style="width:40px">
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                            </svg>
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        % Votes with Party
+                                        <br /><div style="width:40px">
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                            </svg>
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        % Votes Missed
+                                        <br /><div style="width:40px">
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                            </svg>
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        Missed Votes
+                                        <br /><div style="width:40px">
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
+                                            </svg>
+                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
 
-        <table class="table table-striped">
-            <thead class="thead-light">
-                <tr>
-                    <th></th>
-                    <th class="align-bottom text-center">
-                        State<br />
-                        <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateAsc)"></BSIcon>
-                        <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateDesc)"></BSIcon>
+                            <tbody>
 
-                    </th>
-                    @if (CurrentChamber == Chamber.Senate)
-                    {
-                        <th>
-                            Next Election
-                            <br />
-                            <div style="width:40px">
-                                <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearAsc)"></BSIcon>
-                                <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearDesc)"></BSIcon>
-
-
-                            </div>
-                        </th>
-                    }
-                    <th>
-                        Age
-                        <br />
-                        <div style="width:40px">
-                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeAsc)"></BSIcon>
-                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeDesc)"></BSIcon>
-                        </div>
-                    </th>
-                    <th>
-                        Seniority
-                        <br /><div style="width:40px">
-                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityAsc)"></BSIcon>
-                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityDesc)"></BSIcon>
-                        </div>
-                    </th>
-                    <th>
-                        % Votes with Party
-                        <br /><div style="width:40px">
-                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteAsc)"></BSIcon>
-                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteDesc)"></BSIcon>
-                        </div>
-                    </th>
-                    <th>
-                        % Votes Missed
-                        <br /><div style="width:40px">
-                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissAsc)"></BSIcon>
-                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissDesc)"></BSIcon>
-                        </div>
-                    </th>
-                    <th>
-                        Missed Votes
-                        <br /><div style="width:40px">
-                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesAsc)"></BSIcon>
-                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesDesc)"></BSIcon>
-                        </div>
-                    </th>
-                </tr>
-            </thead>
-
-            <tbody>
-
-                @foreach (var member in ViewModel.FilteredMembers)
-                {
-                    <BSCollapseItem>
-                        <tr>
-                            <td>
-                                <BSCollapseToggle>
-                                    @(context ? "-":"+")
-                                </BSCollapseToggle>
-                                @if (!string.IsNullOrEmpty(member.TwitterAccount))
+                                @foreach (var member in ViewModel.FilteredMembers)
                                 {
-                                    <a target="_blank" href="http://twitter.com/@(member.TwitterAccount)">
-                                        <img src="images/twitter24x24.png" />
-                                    </a>
+                                    <BSCollapseItem>
+                                        <tr>
+                                            <td>
+                                                <BSCollapseToggle>
+                                                    @(context ? "-":"+")
+                                                </BSCollapseToggle>
+                                                @if (!string.IsNullOrEmpty(member.TwitterAccount))
+                                                {
+                                                    <a target="_blank" href="http://twitter.com/@(member.TwitterAccount)">
+                                                        <img src="images/twitter24x24.png" />
+                                                    </a>
+                                                }
+                                                else
+                                                { <img src="images/24x24.png" />}
+                                                @if (!string.IsNullOrEmpty(member.FacebookAccount))
+                                                {
+                                                    <a target="_blank" href="http://facebook.com/@(member.FacebookAccount)">
+                                                        <img src="images/fb24x24.png" />
+                                                    </a>
+                                                }
+                                                else
+                                                { <img src="images/24x24.png" />}
+                                                <span class="badge badge-info party-@(member.Party.ToLower())-background">@member.Party</span>
+                                                <a href="MemberDetail/@member.Id">@($"{member.FirstName} {member.LastName}")</a>
+                                                @($" {member.LeadershipRole}")
+                                            </td>
+                                            <td>
+                                                @if (!string.IsNullOrEmpty(member.District))
+                                                {
+                                                    <a class="mr-2" target="_blank" href="https://www.govtrack.us/congress/members/@(member.State)#map">District @member.District</a>
+                                                }
+                                                @member.State
+                                            </td>
+                                            @if (CurrentChamber == Chamber.Senate)
+                                            {
+                                                <td>
+                                                    @member.NextElection
+                                                </td>
+                                            }
+                                            <td>
+                                                @(CurrentYear - member.DateOfBirth.Year)
+                                            </td>
+                                            <td>
+                                                @member.Seniority
+                                            </td>
+                                            <td>
+                                                @member.PercentageOVotesWithParty
+                                            </td>
+                                            <td>
+                                                @member.PercentageOfVotesMissed
+                                            </td>
+                                            <td>
+                                                @member.MissedVotes
+                                            </td>
+                                        </tr>
+                                        <BSCollapse>
+                                            <tr>
+                                                <td>
+                                                    Senator from @member.State, ranked @(member.Seniority). Voted a total of @member.TotalVotes, missed @(member.MissedVotes). Next election at @member.NextElection<br />
+                                                    Office at @member.Office<br />
+                                                    #TEL @member.Phone<br />
+                                                </td>
+                                            </tr>
+                                            @*<BSCard CardType="CardType.Card">
+                                                    <BSCard CardType="CardType.Body">
+                                                        <BSCard CardType="CardType.Text">
+                                                            @senator.Office
+                                                        </BSCard>
+                                                    </BSCard>
+                                                </BSCard>*@
+                                        </BSCollapse>
+                                    </BSCollapseItem>
                                 }
-                                else
-                                { <img src="images/24x24.png" />}
-                                @if (!string.IsNullOrEmpty(member.FacebookAccount))
-                                {
-                                    <a target="_blank" href="http://facebook.com/@(member.FacebookAccount)">
-                                        <img src="images/fb24x24.png" />
-                                    </a>
-                                }
-                                else
-                                { <img src="images/24x24.png" />}
-                                <span class="badge badge-info party-@(member.Party.ToLower())-background">@member.Party</span>
-                                <a href="MemberDetail/@member.Id">@($"{member.FirstName} {member.LastName}")</a>
-                                @($" {member.LeadershipRole}")
-                            </td>
-                            <td>
-                                @if (!string.IsNullOrEmpty(member.District))
-                                {
-                                    <a class="mr-2" target="_blank" href="https://www.govtrack.us/congress/members/@(member.State)#map">District @member.District</a>
-                                }
-                                @member.State
-                            </td>
-                            @if (CurrentChamber == Chamber.Senate)
-                            {
-                                <td>
-                                    @member.NextElection
-                                </td>
-                            }
-                            <td>
-                                @(CurrentYear - member.DateOfBirth.Year)
-                            </td>
-                            <td>
-                                @member.Seniority
-                            </td>
-                            <td>
-                                @member.PercentageOVotesWithParty
-                            </td>
-                            <td>
-                                @member.PercentageOfVotesMissed
-                            </td>
-                            <td>
-                                @member.MissedVotes
-                            </td>
-                        </tr>
-                        <BSCollapse>
-                            <tr>
-                                <td>
-                                    Senator from @member.State, ranked @(member.Seniority). Voted a total of @member.TotalVotes, missed @(member.MissedVotes). Next election at @member.NextElection<br />
-                                    Office at @member.Office<br />
-                                    #TEL @member.Phone<br />
-                                </td>
-                            </tr>
-                            @*<BSCard CardType="CardType.Card">
-                                    <BSCard CardType="CardType.Body">
-                                        <BSCard CardType="CardType.Text">
-                                            @senator.Office
-                                        </BSCard>
-                                    </BSCard>
-                                </BSCard>*@
-                        </BSCollapse>
-                    </BSCollapseItem>
-                }
-            </tbody>
-        </table>
-    </div>
+                            </tbody>
+                        </table>
+                    </div>
+                </BSTabContent>
+            </BSTab>
+            <BSTab>
+                <BSTabLabel>Charts</BSTabLabel>
+                <BSTabContent>
+                    <div class="row mt-2">
+                        <div class="col-md-8">
+                            <h6>Next Election Year</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@MembersElectionYearByParty"></D3Visualizations.Components.StackedColumnChart>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-md-8">
+                            <h6>Seniority by Party</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@MemberSeniorityByParty"></D3Visualizations.Components.StackedColumnChart>
+                        </div>
+                    </div>
+                </BSTabContent>
+            </BSTab>
+        </BSTabList>
+        <BSTabSelectedContent />
+    </BSTabGroup>
 }
 
 
@@ -161,8 +213,47 @@ else
     [Parameter] public Chamber CurrentChamber { get; set; }
     int CurrentYear = DateTime.Today.Year;
 
+    public DataTable MembersElectionYearByParty { get; set; }
+    public DataTable MemberSeniorityByParty { get; set; }
+
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == "FilteredMembers")
+        {
+            var electionYears = ViewModel.FilteredMembers.GroupBy(m => m.NextElection).OrderBy(y => y.Key);
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Year");
+            dt.Columns.Add("Democrat");
+            dt.Columns.Add("Republican");
+            dt.Columns.Add("Other");
+
+            foreach (var year in electionYears)
+            {
+                dt.Rows.Add(year.Key,
+                    year.Where(y => y.Party == "D").Count(),
+                    year.Where(y => y.Party == "R").Count(),
+                    year.Where(y => y.Party != "D" && y.Party != "R"));
+            }
+            MembersElectionYearByParty = dt;
+
+            var seniority = ViewModel.FilteredMembers.GroupBy(m => m.Seniority / 10).OrderBy(g => g.Key) ;
+            var dt1 = new DataTable();
+            dt1.Columns.Add("Seniority");
+            dt1.Columns.Add("Democrat");
+            dt1.Columns.Add("Republican");
+            dt1.Columns.Add("Other");
+
+            foreach (var year in seniority)
+            {
+                dt1.Rows.Add($"{year.Key * 10 + 1} - {(year.Key + 1)*10}",
+                    year.Where(y => y.Party == "D").Count(),
+                    year.Where(y => y.Party == "R").Count(),
+                    year.Where(y => y.Party != "D" && y.Party != "R"));
+            }
+            MemberSeniorityByParty = dt1;
+
+
+        }
         await InvokeAsync(() =>
         {
             StateHasChanged();

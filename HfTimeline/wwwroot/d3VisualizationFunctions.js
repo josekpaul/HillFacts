@@ -110,7 +110,7 @@ window.d3VisualizationFunctions = {
 			.attr("fill", "grey")
 	},
 
-	drawStackedColumnChart: function (dataTable, categoryColumn, elem, dotnetRef, callbackFn) {
+	drawStackedColumnChart: function (dataTable, categoryColumn, elem, dontnetObject, callback) {
 
 		const d3Selection = d3.select(elem).html("");
 		d3Selection.selectAll("*").remove();
@@ -181,18 +181,18 @@ window.d3VisualizationFunctions = {
 			})
 			.on("mousemove", function (event, d) {
 				Tooltip
-					.html((d[1] - d[0]) + " " + d3.select(this.parentNode).datum().key)
-					.style("left", (event.pageX + "px"))
-					.style("top", ((event.pageY + 5) + "px"));
+					.html(d3.select(this.parentNode).datum().key + ": " + (d[1] - d[0]).toFixed(2))
+					.style("left", ((xScale(d.data[categoryColumn]) + xScale.bandwidth() / 2) + "px"))
+					.style("top", "3px");
 			})
 			.on("mouseleave", function (event, d) {
 				Tooltip
 					.style("opacity", 0)
 				d3.select(this)
 					.style("opacity", 0.8);
-			}).
-			on("click", function (event, d) {
-				dotnetRef.invokeMethodAsync(callbackFn, d[categoryColumn] + "|" + d3.select(this.parentNode).datum().key);
+			})
+			.on("click", function (event, d) {
+				return dontnetObject.invokeMethodAsync(callback, d.data[categoryColumn] + "|" + d3.select(this.parentNode).datum().key);
 			});
     /*.on("mouseover", function(){d3.select(this).attr("fill", "purple")})
     .on("mouseout", function(){d3.select(this).attr("fill", color(series.key))})*/;

@@ -23,15 +23,6 @@ namespace HillFacts.Client.ViewModels
             set { SetValue<List<CandidateResponse>>(ref candidatesInfo, value); }
         }
 
-        DataTable candidatesInfoTable;
-        public DataTable CandidatesInfoTable
-        {
-            get { return candidatesInfoTable; }
-            set { SetValue<DataTable>(ref candidatesInfoTable, value); }
-        }
-
-
-
         IAppCacheService appCacheService;
         public CampaignComparisonViewModel(IAppCacheService appCacheService)
         {
@@ -40,25 +31,13 @@ namespace HillFacts.Client.ViewModels
 
         public async Task GetInfo()
         {
-            candidatesInfo = new List<CandidateResponse>();
+            var cInfo = new List<CandidateResponse>();
             foreach (var candidate in candidates)
             {
                 var candidateInfo = await appCacheService.CallCacheableServerMethod<CandidateResponse>($"/api/PropublicaCampaignFinance/getcandidate?cycle=2020&fecId={candidate.Key}");
-                candidatesInfo.Add(candidateInfo);
+                cInfo.Add(candidateInfo);
             }
-            OnPropertyChanged("CandidatesInfo");
-            DataTable dt = new DataTable();
-            dt.Columns.Add("Candidate");
-            dt.Columns.Add("Total From Individuals (Itemized)");
-            dt.Columns.Add("Total From Individuals (UnItemized)");
-            dt.Columns.Add("Total From PACs");
-
-            foreach (var c in candidatesInfo)
-            {
-                dt.Rows.Add(c.Results[0].DisplayName, Math.Round(c.Results[0].TotalFromIndividualsItemized/1000000.00, 2),
-                    Math.Round(c.Results[0].TotalFromIndividualsUnitemized / 1000000.00, 2), Math.Round(c.Results[0].TotalFromPacs / 1000000.00, 2));
-            }
-            CandidatesInfoTable = dt;
+            CandidatesInfo = cInfo;
         }
     }
 }

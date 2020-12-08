@@ -1,4 +1,5 @@
 @using System.ComponentModel
+@using System.Data 
 @inject ICampaignComparisonViewModel ViewModel
 <BSTabGroup>
     <BSTabList>
@@ -154,7 +155,7 @@
         <BSTab>
             <BSTabLabel>Charts</BSTabLabel>
             <BSTabContent>
-                @if (ViewModel.CandidatesInfoTable == null)
+                @if (CandidatesInfoTable == null)
                 {
                     <span>Loading..</span>
                 }
@@ -163,7 +164,8 @@
                     <div class="row mt-2">
                         <div class="col-md-6">
                             <h6 class="mb-1">Campaign Contributions (in millions of dollars)</h6>
-                            <D3Visualizations.Components.StackedColumnChart Data="@ViewModel.CandidatesInfoTable"></D3Visualizations.Components.StackedColumnChart>
+                            <h6>@InvokedFromJavascript</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@CandidatesInfoTable" OnClick="(m) => InvokedFromJavascript = m"></D3Visualizations.Components.StackedColumnChart>
                         </div>
                     </div>
                 }
@@ -179,6 +181,9 @@
     [Inject]
     public JSEmbed.Services.JSEmbedService JSEmbedService { get; set; }
 
+    String InvokedFromJavascript { get; set; }
+    DataTable CandidatesInfoTable { get; set; }
+
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
     {
         await InvokeAsync(() =>
@@ -192,6 +197,18 @@
         ViewModel.Candidates = Candidates;
         ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
         await ViewModel.GetInfo();
+        DataTable dt = new DataTable();
+        dt.Columns.Add("Candidate");
+        dt.Columns.Add("Total From Individuals (Itemized)");
+        dt.Columns.Add("Total From Individuals (UnItemized)");
+        dt.Columns.Add("Total From PACs");
+
+        foreach (var c in ViewModel.CandidatesInfo)
+        {
+            dt.Rows.Add(c.Results[0].DisplayName, Math.Round(c.Results[0].TotalFromIndividualsItemized / 1000000.00, 2),
+                Math.Round(c.Results[0].TotalFromIndividualsUnitemized / 1000000.00, 2), Math.Round(c.Results[0].TotalFromPacs / 1000000.00, 2));
+        }
+        CandidatesInfoTable = dt;
     }
 
     public void Dispose()
