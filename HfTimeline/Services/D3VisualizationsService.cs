@@ -23,12 +23,8 @@ namespace D3Visualizations.Services
 
         public async Task DrawStackedColumnChart(DataTable d, ElementReference element, object dotnetObject, string callbackFunction)
         {
-            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), categoryColumn, element);
-        }
-
-        public async Task DrawStackedColumnChart(DataTable d, ElementReference element)
-        {
-            await DrawStackedColumnChart(d, d.Columns[0].ColumnName, element);
+            await _jsRuntime.InvokeVoidAsync("d3VisualizationFunctions.drawStackedColumnChart", ToCsv(d), d.Columns[0].ColumnName,
+                element, dotnetObject, callbackFunction);
         }
 
 

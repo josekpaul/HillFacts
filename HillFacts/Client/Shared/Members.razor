@@ -16,19 +16,17 @@ else
             <BSTab>
                 <BSTabLabel>Table</BSTabLabel>
                 <BSTabContent>
-                    <div class="table-responsive mt-1">
+                    <div class="table-responsive">
+
                         <table class="table table-striped">
                             <thead class="thead-light">
                                 <tr>
                                     <th></th>
                                     <th class="align-bottom text-center">
                                         State<br />
-                                        <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                        </svg>
-                                        <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                        </svg>
+                                        <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateAsc)"></BSIcon>
+                                        <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.StateDesc)"></BSIcon>
+
                                     </th>
                                     @if (CurrentChamber == Chamber.Senate)
                                     {
@@ -36,12 +34,10 @@ else
                                             Next Election
                                             <br />
                                             <div style="width:40px">
-                                                <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                                </svg>
-                                                <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                                </svg>
+                                                <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearAsc)"></BSIcon>
+                                                <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.ElectionYearDesc)"></BSIcon>
+
+
                                             </div>
                                         </th>
                                     }
@@ -49,56 +45,36 @@ else
                                         Age
                                         <br />
                                         <div style="width:40px">
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                            </svg>
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                            </svg>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeAsc)"></BSIcon>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.AgeDesc)"></BSIcon>
                                         </div>
                                     </th>
                                     <th>
                                         Seniority
                                         <br /><div style="width:40px">
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                            </svg>
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                            </svg>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityAsc)"></BSIcon>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.SeniorityDesc)"></BSIcon>
                                         </div>
                                     </th>
                                     <th>
                                         % Votes with Party
                                         <br /><div style="width:40px">
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                            </svg>
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                            </svg>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteAsc)"></BSIcon>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentPartyVoteDesc)"></BSIcon>
                                         </div>
                                     </th>
                                     <th>
                                         % Votes Missed
                                         <br /><div style="width:40px">
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                            </svg>
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                            </svg>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissAsc)"></BSIcon>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.PercentVoteMissDesc)"></BSIcon>
                                         </div>
                                     </th>
                                     <th>
                                         Missed Votes
                                         <br /><div style="width:40px">
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesAsc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-up-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 11.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z" />
-                                            </svg>
-                                            <svg style="cursor:pointer" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesDesc)" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-down-square-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd" d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5a.5.5 0 0 0-1 0v5.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V4.5z" />
-                                            </svg>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_up_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesAsc)"></BSIcon>
+                                            <BSIcon Name="@(BSIcon.Names.arrow_down_square_fill)" @onclick="(s=> ViewModel.Sort = MembersSortCriteria.MissedVotesDesc)"></BSIcon>
                                         </div>
                                     </th>
                                 </tr>
@@ -172,12 +148,12 @@ else
                                                 </td>
                                             </tr>
                                             @*<BSCard CardType="CardType.Card">
-                                                    <BSCard CardType="CardType.Body">
-                                                        <BSCard CardType="CardType.Text">
-                                                            @senator.Office
-                                                        </BSCard>
-                                                    </BSCard>
-                                                </BSCard>*@
+                                    <BSCard CardType="CardType.Body">
+                                        <BSCard CardType="CardType.Text">
+                                            @senator.Office
+                                        </BSCard>
+                                    </BSCard>
+                                </BSCard>*@
                                         </BSCollapse>
                                     </BSCollapseItem>
                                 }
@@ -192,14 +168,44 @@ else
                     <div class="row mt-2">
                         <div class="col-md-8">
                             <h6>Next Election Year</h6>
-                            <D3Visualizations.Components.StackedColumnChart Data="@MembersElectionYearByParty"></D3Visualizations.Components.StackedColumnChart>
+                            <D3Visualizations.Components.StackedColumnChart Data="@MembersElectionYearByParty" OnClick="(msg) => SetElectionYearDisplayData(msg)"></D3Visualizations.Components.StackedColumnChart>
                         </div>
+                        @if (ElectionYearDisplayData != null)
+                        {
+                        <div class="col-md-4 p-1 scrollcontainer-h-450">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <tbody>
+                                        @foreach(var m in ElectionYearDisplayData)
+                                        {
+                                            <tr><td>@m.FirstName @m.LastName (@m.Party, @m.District @m.State): @m.NextElection</td></tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        }
                     </div>
                     <div class="row mt-2">
                         <div class="col-md-8">
                             <h6>Seniority by Party</h6>
-                            <D3Visualizations.Components.StackedColumnChart Data="@MemberSeniorityByParty"></D3Visualizations.Components.StackedColumnChart>
+                            <D3Visualizations.Components.StackedColumnChart Data="@MemberSeniorityByParty" OnClick="(msg) => SetSeniorityDisplayData(msg)"></D3Visualizations.Components.StackedColumnChart>
                         </div>
+                        @if (SeniorityDisplayData != null)
+                        {
+                            <div class="col-md-4 p-1 scrollcontainer-h-450">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            @foreach (var m in SeniorityDisplayData)
+                                            {
+                                                <tr><td>@m.FirstName @m.LastName (@m.Party, @m.District @m.State): @m.Seniority</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </BSTabContent>
             </BSTab>
@@ -215,6 +221,26 @@ else
 
     public DataTable MembersElectionYearByParty { get; set; }
     public DataTable MemberSeniorityByParty { get; set; }
+
+    IEnumerable<MemberSummary> ElectionYearDisplayData { get; set; }
+    void SetElectionYearDisplayData(string msg)
+    {
+        var d = msg.Split("|");
+        var year = int.Parse(d[0]);
+        var party = d[1].Substring(0, 1);
+        ElectionYearDisplayData = ViewModel.FilteredMembers.Where(m => m.NextElection == year && m.Party == party);
+    }
+
+    IEnumerable<MemberSummary> SeniorityDisplayData { get; set; }
+    void SetSeniorityDisplayData(string msg)
+    {
+        var d = msg.Split("|");
+        var seniority = int.Parse(d[0].Substring(0,1));
+        var party = d[1].Substring(0, 1);
+        SeniorityDisplayData = ViewModel.FilteredMembers
+            .Where(m => m.Seniority > (seniority-1)*10 && m.Seniority <= seniority*10 && m.Party == party)
+            .OrderBy(m => m.Seniority);
+    }
 
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
     {
