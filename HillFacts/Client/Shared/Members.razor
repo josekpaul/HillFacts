@@ -172,18 +172,18 @@ else
                         </div>
                         @if (ElectionYearDisplayData != null)
                         {
-                        <div class="col-md-4 p-1 scrollcontainer-h-450">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <tbody>
-                                        @foreach(var m in ElectionYearDisplayData)
-                                        {
-                                            <tr><td>@m.FirstName @m.LastName (@m.Party, @m.District @m.State): @m.NextElection</td></tr>
-                                        }
-                                    </tbody>
-                                </table>
+                            <div class="col-md-4 p-1 scrollcontainer-h-450">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            @foreach (var m in ElectionYearDisplayData)
+                                            {
+                                                <tr><td>@m.FirstName @m.LastName (@m.Party, @m.District @m.State): @m.NextElection</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
                         }
                     </div>
                     <div class="row mt-2">
@@ -207,6 +207,27 @@ else
                             </div>
                         }
                     </div>
+                    <div class="row mt-2">
+                        <div class="col-md-8">
+                            <h6>Member Age by Party</h6>
+                            <D3Visualizations.Components.StackedColumnChart Data="@MemberAgeByParty" OnClick="(msg) => SetAgeDisplayData(msg)"></D3Visualizations.Components.StackedColumnChart>
+                        </div>
+                        @if (AgeDisplayData != null)
+                        {
+                            <div class="col-md-4 p-1 scrollcontainer-h-450">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <tbody>
+                                            @foreach (var m in AgeDisplayData)
+                                            {
+                                                <tr><td>@m.FirstName @m.LastName (@m.Party, @m.District @m.State): @(CurrentYear - m.DateOfBirth.Year) (DOB: @m.DateOfBirth.ToShortDateString())</td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </BSTabContent>
             </BSTab>
         </BSTabList>
@@ -221,6 +242,7 @@ else
 
     public DataTable MembersElectionYearByParty { get; set; }
     public DataTable MemberSeniorityByParty { get; set; }
+    public DataTable MemberAgeByParty { get; set; }
 
     IEnumerable<MemberSummary> ElectionYearDisplayData { get; set; }
     void SetElectionYearDisplayData(string msg)
@@ -235,11 +257,22 @@ else
     void SetSeniorityDisplayData(string msg)
     {
         var d = msg.Split("|");
-        var seniority = int.Parse(d[0].Substring(0,1));
+        var seniority = (d[0].Substring(1,1) == "1")?int.Parse(d[0].Substring(0,1)):0;
         var party = d[1].Substring(0, 1);
         SeniorityDisplayData = ViewModel.FilteredMembers
-            .Where(m => m.Seniority > (seniority-1)*10 && m.Seniority <= seniority*10 && m.Party == party)
+            .Where(m => m.Seniority > seniority*10 && m.Seniority <= (seniority+1)*10 && m.Party == party)
             .OrderBy(m => m.Seniority);
+    }
+
+    IEnumerable<MemberSummary> AgeDisplayData { get; set; }
+    void SetAgeDisplayData(string msg)
+    {
+        var d = msg.Split("|");
+        var age = (d[0].Substring(1, 1) == "1") ? int.Parse(d[0].Substring(0, 1)) : 0;
+        var party = d[1].Substring(0, 1);
+        AgeDisplayData = ViewModel.FilteredMembers
+            .Where(m => CurrentYear - m.DateOfBirth.Year > age * 10 && CurrentYear - m.DateOfBirth.Year <= (age + 1) * 10 && m.Party == party)
+            .OrderBy(m => CurrentYear - m.DateOfBirth.Year);
     }
 
     async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
@@ -277,6 +310,22 @@ else
                     year.Where(y => y.Party != "D" && y.Party != "R"));
             }
             MemberSeniorityByParty = dt1;
+
+            var age = ViewModel.FilteredMembers.GroupBy(m => (CurrentYear - m.DateOfBirth.Year) / 10).OrderBy(g => g.Key);
+            var dt2 = new DataTable();
+            dt2.Columns.Add("Age");
+            dt2.Columns.Add("Democrat");
+            dt2.Columns.Add("Republican");
+            dt2.Columns.Add("Other");
+
+            foreach (var year in age)
+            {
+                dt2.Rows.Add($"{year.Key * 10 + 1} - {(year.Key + 1) * 10}",
+                    year.Where(y => y.Party == "D").Count(),
+                    year.Where(y => y.Party == "R").Count(),
+                    year.Where(y => y.Party != "D" && y.Party != "R"));
+            }
+            MemberAgeByParty = dt2;
 
 
         }

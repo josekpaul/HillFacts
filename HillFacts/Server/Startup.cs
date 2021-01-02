@@ -50,7 +50,12 @@ namespace HillFacts.Server
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles(new StaticFileOptions
             {
-                OnPrepareResponse = context => { context.Context.Response.Headers["Cache-Control"] = "no-cache"; }
+                OnPrepareResponse = context =>
+                {
+                    context.Context.Response.Headers.Add("Cache-Control", "no-cache");
+                    context.Context.Response.Headers.Add("Pragma", "no-cache");
+                    context.Context.Response.Headers.Add("Expires", "0");
+                }
             });
 
             app.UseRouting();
