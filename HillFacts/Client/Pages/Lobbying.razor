@@ -10,7 +10,7 @@
             <div class="input-group input-group-lg">
                 <input class="form-control" @bind="ViewModel.Query" type="text" placeholder="search" />
                 <span class="input-group-btn">
-                    <button class="btn btn-default btn-lg" type="button" @onclick="Reset">Reset</button>
+                    <button class="btn btn-default btn-lg" type="button" @onclick="Reset"> <BSIcon Name="@(BSIcon.Names.x_circle)"></BSIcon></button>
                 </span>
             </div>
         </div>
@@ -47,10 +47,14 @@
                                     <span>@record.latest_filing.filing_date  </span>
                                 </td>
                                 <td>
-                                    <a>@record.lobbying_client.name</a>
+                                    <span>@record.lobbying_client.name   </span>
+                                    <button class="btn btn-light btn-xs" type="button"
+                                            @onclick="() => Search(record.lobbying_client.name)">
+                                        <BSIcon Name="@(BSIcon.Names.search)"></BSIcon>
+                                    </button>
                                 </td>
                                 <td>
-                                    <a href="@record.latest_filing.pdf_url">Filing PDF</a>
+                                    <a href="@record.latest_filing.pdf_url"><BSIcon Name="@(BSIcon.Names.file_earmark)"></BSIcon></a>
                                 </td>
                             </tr>
                             <tr>
@@ -89,6 +93,11 @@
                     return "";
             }
         }
+    }
+
+    private void Search(string query)
+    {
+        ViewModel.Query = query;
     }
 
 
