@@ -14,6 +14,8 @@ namespace ProPublicaCongressAPI
         private readonly string apiKey;
 
         private const string apiBaseUrl = "https://api.propublica.org/congress/";
+        private const string lobbyingTermSearchUrl = "v1/lobbying/search.json?query=";
+        private const string latestLobbyingUrl = "v1/lobbying/latest.json";
         private const string membersUrl = "v1/{0}/{1}/members.json"; // 0 = congress, 1 = chamber
         private const string specificMemberUrl = "v1/members/{0}.json"; // 0 = member-id
         private const string newMembersUrl = "v1/members/new.json";
@@ -92,6 +94,32 @@ namespace ProPublicaCongressAPI
                 InternalModels.SpecificNomination,
                 Contracts.SpecificNomination>(internalModel.Results.ElementAt(0));
 
+            return contract;
+        }
+
+        public async Task<List<LobbyingRepresentation>> LobbyingSearch(string query)
+        {
+            string url = apiBaseUrl + String.Format(lobbyingTermSearchUrl)+query;
+            var internalModel = await GetMultipleResultDataAsync<InternalModels.Result>(url);
+
+            var data = internalModel.Results.ElementAt(0).lobbying_representations.ToList();
+
+            var contract = AutoMapperConfiguration.Mapper.Map
+                <IReadOnlyCollection<InternalModels.LobbyingRepresentation>,
+                IReadOnlyCollection<Contracts.LobbyingRepresentation>>(data).ToList();
+            return contract;
+        }
+
+        public async Task<List<LobbyingRepresentation>> GetRecentLobbyingActivity()
+        {
+            string url = apiBaseUrl + String.Format(latestLobbyingUrl);
+            var internalModel = await GetMultipleResultDataAsync<InternalModels.Result>(url);
+
+            var data = internalModel.Results.ElementAt(0).lobbying_representations.ToList();
+
+            var contract = AutoMapperConfiguration.Mapper.Map
+                <IReadOnlyCollection<InternalModels.LobbyingRepresentation>,
+                IReadOnlyCollection<Contracts.LobbyingRepresentation>>(data).ToList();
             return contract;
         }
 

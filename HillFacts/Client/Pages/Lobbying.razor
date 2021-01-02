@@ -1,0 +1,115 @@
+﻿@inject ILobbyingViewModel ViewModel
+@using System.ComponentModel
+
+@page "/Lobbying"
+@{
+    <h3 class="mb-2">Lobbying Activity</h3>
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="input-group input-group-lg">
+                <input class="form-control" @bind="ViewModel.Query" type="text" placeholder="search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-lg" type="button" @onclick="Reset">Reset</button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div>@PageStateMessage</div>
+
+    @if (ViewModel.PageSearchState == PageSearchState.HasResults)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Filing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in ViewModel.representations)
+                    {
+                        <BSCollapseItem>
+                            <tr>
+                                <td>
+                                    <BSCollapseToggle>
+                                        @(context ? "-" : "+")
+                                    </BSCollapseToggle>
+                                </td>
+                                <td>
+                                    <span>@record.latest_filing.filing_date  </span>
+                                </td>
+                                <td>
+                                    <a>@record.lobbying_client.name</a>
+                                </td>
+                                <td>
+                                    <a href="@record.latest_filing.pdf_url">Filing PDF</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <BSCollapse>
+                                        <a>@record.specific_issues.FirstOrDefault()</a>
+                                    </BSCollapse>
+
+                                </td>
+                            </tr>
+                        </BSCollapseItem>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+@code{
+
+    private string PageStateMessage
+    {
+        get
+        {
+            switch (ViewModel.PageSearchState)
+            {
+                case PageSearchState.Initializing:
+                    return "Loading recent lobbying activity...";
+                case PageSearchState.NoResults:
+                    return $"No results for {ViewModel.Query}";
+                case PageSearchState.Searching:
+                    return $"Searching for {ViewModel.Query}...";
+                default:
+                    return "";
+            }
+        }
+    }
+
+
+    private async void Reset()
+    {
+        ViewModel.representations = await ViewModel.RecentLobbying();
+        ViewModel.Query = "";
+    }
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.representations = await ViewModel.RecentLobbying();
+    }
+}
