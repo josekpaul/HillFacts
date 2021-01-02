@@ -1,0 +1,128 @@
+﻿@inject ILobbyingViewModel ViewModel
+@using System.ComponentModel
+
+@page "/Lobbying"
+@{
+    <h3 class="mb-2">Lobbying Activity</h3>
+
+    <div class="row">
+        <div class="col-lg-9">
+            <div class="input-group input-group-lg">
+                <input class="form-control" @bind="ViewModel.Query" type="text" placeholder="search" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default btn-lg" type="button" @onclick="Reset"> <BSIcon Name="@(BSIcon.Names.x_circle)"></BSIcon></button>
+                </span>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div>@PageStateMessage</div>
+
+    @if (ViewModel.PageSearchState == PageSearchState.HasResults)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th></th>
+                        <th>Date</th>
+                        <th>Client</th>
+                        <th>Filing</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var record in ViewModel.representations)
+                    {
+                        <BSCollapseItem>
+                            <tr>
+                                <td>
+                                    <BSCollapseToggle>
+
+                                        <BSIcon Name="@(context ? BSIcon.Names.caret_up_square : BSIcon.Names.caret_down_square)"></BSIcon>
+                                       
+                                    </BSCollapseToggle>
+                                </td>
+                                <td>
+                                    <span>@record.latest_filing.filing_date  </span>
+                                </td>
+                                <td>
+                                    <span>@record.lobbying_client.name   </span>
+                                    <button class="btn btn-light btn-xs" type="button"
+                                            @onclick="() => Search(record.lobbying_client.name)">
+                                        <BSIcon Name="@(BSIcon.Names.search)"></BSIcon>
+                                    </button>
+                                </td>
+                                <td>
+                                    <a href="@record.latest_filing.pdf_url"><BSIcon Name="@(BSIcon.Names.file_earmark)"></BSIcon></a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4">
+                                    <BSCollapse>
+                                        <ul>
+                                            @foreach (var issue in @record.specific_issues)
+                                            {<li> @issue</li>}
+                                        </ul>
+                                    </BSCollapse>
+                                </td>
+                            </tr>
+                        </BSCollapseItem>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
+
+@code{
+
+    private string PageStateMessage
+    {
+        get
+        {
+            switch (ViewModel.PageSearchState)
+            {
+                case PageSearchState.Initializing:
+                    return "Loading recent lobbying activity...";
+                case PageSearchState.NoResults:
+                    return $"No results for {ViewModel.Query}";
+                case PageSearchState.Searching:
+                    return $"Searching for {ViewModel.Query}...";
+                default:
+                    return "";
+            }
+        }
+    }
+
+    private void Search(string query)
+    {
+        ViewModel.Query = query;
+    }
+
+
+    private async void Reset()
+    {
+        ViewModel.representations = await ViewModel.RecentLobbying();
+        ViewModel.Query = "";
+    }
+
+    async void OnPropertyChangedEventHandler(object sender, PropertyChangedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        ViewModel.PropertyChanged -= OnPropertyChangedEventHandler;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        ViewModel.PropertyChanged += OnPropertyChangedEventHandler;
+        ViewModel.representations = await ViewModel.RecentLobbying();
+    }
+}

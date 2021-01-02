@@ -6,6 +6,8 @@ namespace ProPublicaCongressAPI
 {
     public interface IProPublicaCongressApiClient
     {
+        Task<List<LobbyingRepresentation>> LobbyingSearch(string query);
+        Task<List<LobbyingRepresentation>> GetRecentLobbyingActivity();
         Task<MemberBillSponsorshipComparisonContainer> CompareMemberBillSponsorships(string firstMemberId, string secondMemberId, int congress, Chamber chamber);
         Task<IReadOnlyCollection<MemberVoteComparison>> CompareMemberVotes(string firstMemberId, string secondMemberId, int congress, Chamber chamber);
         Task<Contracts.AmendmentsContainer> GetAmendments(int congress, string billId, int? offset);

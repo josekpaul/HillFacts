@@ -200,6 +200,14 @@ namespace ProPublicaCongressAPI
                     x.CreateMap<InternalModels.Committee, Contracts.Committee>();
                     x.CreateMap<InternalModels.CommitteesContainer, Contracts.CommitteesContainer>();
 
+                    x.CreateMap<InternalModels.LobbyingRepresentation, Contracts.LobbyingRepresentation>();
+                    x.CreateMap<InternalModels.Lobbyist, Contracts.Lobbyist>();
+                    x.CreateMap<InternalModels.LatestFiling, Contracts.LatestFiling>();
+                    x.CreateMap<InternalModels.LobbyingRegistrant, Contracts.LobbyingRegistrant>();
+                    x.CreateMap<InternalModels.LobbyingClient, Contracts.LobbyingClient>();
+                    x.CreateMap<InternalModels.Result, Contracts.Result>();
+
+
                     x.CreateMap<InternalModels.SpecificCommittee, Contracts.SpecificCommittee>();
                     x.CreateMap<InternalModels.SpecificCommitteeMember, Contracts.SpecificCommitteeMember>()
                         .ForMember(dest => dest.DateStarted,

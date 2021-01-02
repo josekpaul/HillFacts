@@ -19,6 +19,18 @@ namespace HillFacts.Server.Controllers
             _propublica = new ProPublicaCongressApiClient (config.Value.PropublicaApiKey);
         }
 
+        public async Task<IEnumerable<LobbyingRepresentation>> LobbyingSearch(string term)
+        {
+            var lobbying = await _propublica.LobbyingSearch(term);
+            return lobbying;
+        }
+
+        public async Task<IEnumerable<LobbyingRepresentation>> GetLobbyingActivity()
+        {
+            var lobbying = await _propublica.GetRecentLobbyingActivity();
+            return lobbying;
+        }
+
         public async Task<IEnumerable<MemberSummary>> GetMembers(Chamber chamber)
         {
             var membercollection = await _propublica.GetMembersAsync(116, chamber);
