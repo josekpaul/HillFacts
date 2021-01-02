@@ -38,7 +38,9 @@
                             <tr>
                                 <td>
                                     <BSCollapseToggle>
-                                        @(context ? "-" : "+")
+
+                                        <BSIcon Name="@(context ? BSIcon.Names.caret_up_square : BSIcon.Names.caret_down_square)"></BSIcon>
+                                       
                                     </BSCollapseToggle>
                                 </td>
                                 <td>
@@ -54,9 +56,11 @@
                             <tr>
                                 <td colspan="4">
                                     <BSCollapse>
-                                        <a>@record.specific_issues.FirstOrDefault()</a>
+                                        <ul>
+                                            @foreach (var issue in @record.specific_issues)
+                                            {<li> @issue</li>}
+                                        </ul>
                                     </BSCollapse>
-
                                 </td>
                             </tr>
                         </BSCollapseItem>
